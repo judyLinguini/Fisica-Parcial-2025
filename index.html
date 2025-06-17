@@ -84,6 +84,29 @@
         <button onclick="toggleDataset(2)">Aceleración</button>
     </div>
 
+    <div id="controles-integrales" style="display: none;">
+        <h3>Cálculo de Integrales</h3>
+        <div class="integrales-inputs">
+            <label for="tipo-funcion-integral">Función a integrar:</label>
+            <select id="tipo-funcion-integral">
+                <option value="velocidad">Velocidad (v)</option>
+                <option value="posicion">Posición (x)</option>
+                <option value="aceleracion">Aceleración (a)</option>
+            </select>
+            
+            <div class="integrales-botones">
+                <button onclick="calcularIntegrales()" class="btn-integral">Calcular Integral (Numérico)</button>
+                <button onclick="calcularIntegralAnaliticamente()" class="btn-integral">Calcular Integral (Analítico)</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="seccion-integrales" style="display: none;">
+        <div id="resultados-integrales">
+            <!-- Los resultados se mostrarán aquí dinámicamente -->
+        </div>
+    </div>
+
     <div id="ecuaciones" class="ecuaciones">
         <h2>Ecuaciones Utilizadas</h2>
         <p id="ecuaciones-texto"></p>

@@ -146,7 +146,6 @@ function finalizarSimulacion() {
     document.getElementById("valores-dinamicos").style.display = "none";
     document.getElementById("controles-tiempo-real").style.display = "none";
 
-    
     // Generar gráfica final
     generarGraficaFinal();
     
@@ -155,6 +154,9 @@ function finalizarSimulacion() {
     
     // Mostrar ecuaciones utilizadas
     mostrarEcuaciones();
+
+    // Mostrar botón de cálculo de integrales
+    document.getElementById("controles-integrales").style.display = "block";
 }
 
 function cambiarAceleracionTiempoReal(cambio) {
@@ -321,6 +323,161 @@ function toggleDataset(index) {
     }
 }
 
+function calcularIntegrales() {
+    if (datosTiempo.length === 0) {
+        alert("No hay datos de simulación disponibles.");
+        return;
+    }
+
+    const tipoFuncion = document.getElementById("tipo-funcion-integral").value;
+    const resultados = document.getElementById("resultados-integrales");
+    
+    let integralResultado = 0;
+    let unidades = "";
+    let descripcionFisica = "";
+    let datos = [];
+
+    switch (tipoFuncion) {
+        case "velocidad":
+            integralResultado = calcularIntegralTrapecio(datosTiempo, datosVelocidad);
+            unidades = "m";
+            descripcionFisica = "Desplazamiento total";
+            datos = datosVelocidad;
+            break;
+        case "posicion":
+            integralResultado = calcularIntegralTrapecio(datosTiempo, datosPosicion);
+            unidades = "m·s";
+            descripcionFisica = "Área bajo la curva de posición";
+            datos = datosPosicion;
+            break;
+        case "aceleracion":
+            integralResultado = calcularIntegralTrapecio(datosTiempo, datosAceleracion);
+            unidades = "m/s";
+            descripcionFisica = "Cambio total de velocidad";
+            datos = datosAceleracion;
+            break;
+    }
+
+    // Mostrar resultados
+    resultados.innerHTML = `
+        <h4>Resultado del Cálculo de Integral</h4>
+        <div class="resultado-integral">
+            <p><strong>Función integrada:</strong> ${tipoFuncion.charAt(0).toUpperCase() + tipoFuncion.slice(1)}</p>
+            <p><strong>Método:</strong> Regla del Trapecio</p>
+            <p><strong>Intervalo:</strong> [0, ${datosTiempo[datosTiempo.length - 1].toFixed(2)}] segundos</p>
+            <p><strong>Valor de la integral:</strong> ${integralResultado.toFixed(4)} ${unidades}</p>
+            <p><strong>Interpretación física:</strong> ${descripcionFisica}</p>
+            <p><strong>Número de intervalos:</strong> ${datosTiempo.length - 1}</p>
+        </div>
+        
+        <div class="detalles-calculo">
+            <h5>Detalles del Cálculo</h5>
+            <p>La integral se calculó usando la regla del trapecio con la fórmula:</p>
+            <p class="formula">∫f(t)dt ≈ Σ[(f(t₍ᵢ₎) + f(t₍ᵢ₊₁₎))/2] × Δt</p>
+            <p>Donde Δt = ${(datosTiempo[1] - datosTiempo[0]).toFixed(1)} segundos</p>
+        </div>
+    `;
+
+    // Mostrar la sección de resultados
+    document.getElementById("seccion-integrales").style.display = "block";
+}
+
+function calcularIntegralTrapecio(tiempos, valores) {
+    if (tiempos.length !== valores.length || tiempos.length < 2) {
+        return 0;
+    }
+
+    let integral = 0;
+    
+    for (let i = 0; i < tiempos.length - 1; i++) {
+        const deltaT = tiempos[i + 1] - tiempos[i];
+        const promedioValores = (valores[i] + valores[i + 1]) / 2;
+        integral += promedioValores * deltaT;
+    }
+
+    return integral;
+}
+
+function calcularIntegralAnaliticamente() {
+    const tipoFuncion = document.getElementById("tipo-funcion-integral").value;
+    const resultados = document.getElementById("resultados-integrales");
+    
+    if (tipoAceleracionSeleccionada === "constante") {
+        calcularIntegralAnaliticaConstante(tipoFuncion, resultados);
+    } else {
+        calcularIntegralAnaliticaVariable(tipoFuncion, resultados);
+    }
+}
+
+function calcularIntegralAnaliticaConstante(tipoFuncion, elementoResultados) {
+    const velocidadInicial = parseFloat(document.getElementById("velocidad").value);
+    const aceleracion = parseFloat(document.getElementById("aceleracion").value);
+    const tiempoFinal = datosTiempo[datosTiempo.length - 1];
+    
+    let integral = 0;
+    let formula = "";
+    let unidades = "";
+    let descripcion = "";
+
+    switch (tipoFuncion) {
+        case "velocidad":
+            // v(t) = v₀ + at
+            // ∫v(t)dt = v₀t + (1/2)at²
+            integral = velocidadInicial * tiempoFinal + 0.5 * aceleracion * Math.pow(tiempoFinal, 2);
+            formula = `∫(${velocidadInicial} + ${aceleracion}t)dt = ${velocidadInicial}t + (1/2)×${aceleracion}×t²`;
+            unidades = "m";
+            descripcion = "Desplazamiento total";
+            break;
+        case "aceleracion":
+            // a(t) = a (constante)
+            // ∫a dt = at
+            integral = aceleracion * tiempoFinal;
+            formula = `∫${aceleracion} dt = ${aceleracion}×t`;
+            unidades = "m/s";
+            descripcion = "Cambio total de velocidad";
+            break;
+        case "posicion":
+            // x(t) = x₀ + v₀t + (1/2)at²
+            // ∫x(t)dt = x₀t + (1/2)v₀t² + (1/6)at³
+            integral = 0.5 * velocidadInicial * Math.pow(tiempoFinal, 2) + (1/6) * aceleracion * Math.pow(tiempoFinal, 3);
+            formula = `∫(${velocidadInicial}t + (1/2)×${aceleracion}×t²)dt = (1/2)×${velocidadInicial}×t² + (1/6)×${aceleracion}×t³`;
+            unidades = "m·s";
+            descripcion = "Área bajo la curva de posición";
+            break;
+    }
+
+    elementoResultados.innerHTML = `
+        <h4>Cálculo Analítico de la Integral</h4>
+        <div class="resultado-integral">
+            <p><strong>Función integrada:</strong> ${tipoFuncion.charAt(0).toUpperCase() + tipoFuncion.slice(1)}</p>
+            <p><strong>Método:</strong> Integración Analítica</p>
+            <p><strong>Fórmula:</strong> ${formula}</p>
+            <p><strong>Evaluada en [0, ${tiempoFinal.toFixed(2)}]:</strong> ${integral.toFixed(4)} ${unidades}</p>
+            <p><strong>Interpretación física:</strong> ${descripcion}</p>
+        </div>
+    `;
+
+    document.getElementById("seccion-integrales").style.display = "block";
+}
+
+function calcularIntegralAnaliticaVariable(tipoFuncion, elementoResultados) {
+    const funcionAceleracion = document.getElementById("funcion-aceleracion").value;
+    const tiempoFinal = datosTiempo[datosTiempo.length - 1];
+    
+    elementoResultados.innerHTML = `
+        <h4>Cálculo Analítico de la Integral</h4>
+        <div class="resultado-integral">
+            <p><strong>Función integrada:</strong> ${tipoFuncion.charAt(0).toUpperCase() + tipoFuncion.slice(1)}</p>
+            <p><strong>Método:</strong> Integración Analítica (Aceleración Variable)</p>
+            <p><strong>Función de aceleración:</strong> a(t) = ${funcionAceleracion}</p>
+            <p><strong>Nota:</strong> Para aceleración variable, la integración analítica depende de la función específica.</p>
+            <p><strong>Sugerencia:</strong> Use el método numérico (Regla del Trapecio) para obtener un resultado aproximado.</p>
+        </div>
+    `;
+    
+    document.getElementById("seccion-integrales").style.display = "block";
+}
+
 function mostrarEcuaciones() {
     const velocidadInicial = parseFloat(document.getElementById("velocidad").value);
     const tiempoFinal = tiempoActual;
@@ -400,6 +557,8 @@ function reiniciarSimulacion() {
     enSimulacion = false;
     document.getElementById("btn-iniciar").disabled = false;
     document.getElementById("controles-tiempo-real").style.display = "none";
+    document.getElementById("controles-integrales").style.display = "none";
+    document.getElementById("seccion-integrales").style.display = "none";
 
     // Reiniciar valores
     document.getElementById("auto").style.left = "0px";
