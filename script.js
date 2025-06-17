@@ -478,6 +478,224 @@ function calcularIntegralAnaliticaVariable(tipoFuncion, elementoResultados) {
     document.getElementById("seccion-integrales").style.display = "block";
 }
 
+// NUEVAS FUNCIONES PARA CÁLCULO DE DERIVADAS
+
+function calcularDerivadas() {
+    if (datosTiempo.length === 0) {
+        alert("No hay datos de simulación disponibles.");
+        return;
+    }
+
+    const tipoFuncion = document.getElementById("tipo-funcion-derivada").value;
+    const resultados = document.getElementById("resultados-derivadas");
+    
+    let derivadaResultado = [];
+    let unidades = "";
+    let descripcionFisica = "";
+    let datos = [];
+
+    switch (tipoFuncion) {
+        case "posicion":
+            derivadaResultado = calcularDerivadaNumerica(datosTiempo, datosPosicion);
+            unidades = "m/s";
+            descripcionFisica = "Velocidad instantánea";
+            datos = datosPosicion;
+            break;
+        case "velocidad":
+            derivadaResultado = calcularDerivadaNumerica(datosTiempo, datosVelocidad);
+            unidades = "m/s²";
+            descripcionFisica = "Aceleración instantánea";
+            datos = datosVelocidad;
+            break;
+        case "aceleracion":
+            derivadaResultado = calcularDerivadaNumerica(datosTiempo, datosAceleracion);
+            unidades = "m/s³";
+            descripcionFisica = "Jerk (cambio de aceleración)";
+            datos = datosAceleracion;
+            break;
+    }
+
+    // Verificar que hay datos para calcular estadísticas
+    if (derivadaResultado.length === 0) {
+        alert("No se pudieron calcular las derivadas.");
+        return;
+    }
+
+    // Calcular estadísticas de la derivada
+    const derivadaPromedio = derivadaResultado.reduce((a, b) => a + b, 0) / derivadaResultado.length;
+    const derivadaMaxima = Math.max(...derivadaResultado.map(Math.abs));
+    const derivadaMinima = Math.min(...derivadaResultado);
+    const derivadaMaximaAbs = Math.max(...derivadaResultado);
+
+    // Mostrar resultados
+    resultados.innerHTML = `
+        <h4>Resultado del Cálculo de Derivada</h4>
+        <div class="resultado-derivada">
+            <p><strong>Función derivada:</strong> ${tipoFuncion.charAt(0).toUpperCase() + tipoFuncion.slice(1)}</p>
+            <p><strong>Método:</strong> Diferencias finitas (aproximación numérica)</p>
+            <p><strong>Intervalo:</strong> [0, ${datosTiempo[datosTiempo.length - 1].toFixed(2)}] segundos</p>
+            <p><strong>Interpretación física:</strong> ${descripcionFisica}</p>
+            <p><strong>Número de puntos calculados:</strong> ${derivadaResultado.length}</p>
+        </div>
+        
+        <div class="estadisticas-derivada">
+            <h5>Estadísticas de la Derivada</h5>
+            <p><strong>Valor promedio:</strong> ${derivadaPromedio.toFixed(4)} ${unidades}</p>
+            <p><strong>Valor máximo:</strong> ${derivadaMaximaAbs.toFixed(4)} ${unidades}</p>
+            <p><strong>Valor mínimo:</strong> ${derivadaMinima.toFixed(4)} ${unidades}</p>
+            <p><strong>Máxima variación:</strong> ${derivadaMaxima.toFixed(4)} ${unidades}</p>
+        </div>
+        
+        <div class="detalles-calculo-derivada">
+            <h5>Detalles del Cálculo</h5>
+            <p>La derivada se calculó usando diferencias finitas con la fórmula:</p>
+            <p class="formula">f'(t) ≈ [f(t₍ᵢ₊₁₎) - f(t₍ᵢ₎)] / Δt</p>
+            <p>Donde Δt = ${(datosTiempo[1] - datosTiempo[0]).toFixed(1)} segundos</p>
+        </div>
+    `;
+
+    // Mostrar la sección de resultados
+    document.getElementById("seccion-derivadas").style.display = "block";
+}
+
+function calcularDerivadaNumerica(tiempos, valores) {
+    if (tiempos.length !== valores.length || tiempos.length < 2) {
+        return [];
+    }
+
+    let derivada = [];
+    
+    // Calcular derivada usando diferencias finitas
+    for (let i = 0; i < tiempos.length - 1; i++) {
+        const deltaT = tiempos[i + 1] - tiempos[i];
+        if (deltaT === 0) continue; // Evitar división por cero
+        
+        const deltaValor = valores[i + 1] - valores[i];
+        const derivadaEnPunto = deltaValor / deltaT;
+        derivada.push(derivadaEnPunto);
+    }
+
+    return derivada;
+}
+
+function calcularDerivadaAnaliticamente() {
+    const tipoFuncion = document.getElementById("tipo-funcion-derivada").value;
+    const resultados = document.getElementById("resultados-derivadas");
+    
+    if (tipoAceleracionSeleccionada === "constante") {
+        calcularDerivadaAnaliticaConstante(tipoFuncion, resultados);
+    } else {
+        calcularDerivadaAnaliticaVariable(tipoFuncion, resultados);
+    }
+}
+
+function calcularDerivadaAnaliticaConstante(tipoFuncion, elementoResultados) {
+    const velocidadInicial = parseFloat(document.getElementById("velocidad").value);
+    const aceleracion = parseFloat(document.getElementById("aceleracion").value);
+    
+    let derivada = "";
+    let formula = "";
+    let unidades = "";
+    let descripcion = "";
+    let valorConstante = "";
+
+    switch (tipoFuncion) {
+        case "posicion":
+            // x(t) = x₀ + v₀t + (1/2)at²
+            // dx/dt = v₀ + at
+            formula = `d/dt[x₀ + ${velocidadInicial}t + (1/2)×${aceleracion}×t²] = ${velocidadInicial} + ${aceleracion}t`;
+            derivada = `v(t) = ${velocidadInicial} + ${aceleracion}t`;
+            unidades = "m/s";
+            descripcion = "Velocidad instantánea";
+            valorConstante = `Función lineal con pendiente ${aceleracion} m/s² y ordenada ${velocidadInicial} m/s`;
+            break;
+        case "velocidad":
+            // v(t) = v₀ + at
+            // dv/dt = a
+            formula = `d/dt[${velocidadInicial} + ${aceleracion}t] = ${aceleracion}`;
+            derivada = `a(t) = ${aceleracion}`;
+            unidades = "m/s²";
+            descripcion = "Aceleración instantánea";
+            valorConstante = `Aceleración constante: ${aceleracion} m/s²`;
+            break;
+        case "aceleracion":
+            // a(t) = a (constante)
+            // da/dt = 0
+            formula = `d/dt[${aceleracion}] = 0`;
+            derivada = `jerk(t) = 0`;
+            unidades = "m/s³";
+            descripcion = "Jerk (cambio de aceleración)";
+            valorConstante = `Jerk = 0 m/s³ (aceleración constante)`;
+            break;
+    }
+
+    elementoResultados.innerHTML = `
+        <h4>Cálculo Analítico de la Derivada</h4>
+        <div class="resultado-derivada">
+            <p><strong>Función derivada:</strong> ${tipoFuncion.charAt(0).toUpperCase() + tipoFuncion.slice(1)}</p>
+            <p><strong>Método:</strong> Derivación Analítica</p>
+            <p><strong>Función original:</strong> Según ecuaciones de MRUA</p>
+            <p><strong>Cálculo:</strong> ${formula}</p>
+            <p><strong>Resultado:</strong> ${derivada}</p>
+            <p><strong>Unidades:</strong> ${unidades}</p>
+            <p><strong>Interpretación física:</strong> ${descripcion}</p>
+            <p><strong>Descripción:</strong> ${valorConstante}</p>
+        </div>
+    `;
+
+    document.getElementById("seccion-derivadas").style.display = "block";
+}
+
+function calcularDerivadaAnaliticaVariable(tipoFuncion, elementoResultados) {
+    const funcionAceleracion = document.getElementById("funcion-aceleracion").value;
+    const velocidadInicial = parseFloat(document.getElementById("velocidad").value);
+    
+    let derivadaTexto = "";
+    let descripcion = "";
+    let explicacion = "";
+
+    switch (tipoFuncion) {
+        case "posicion":
+            derivadaTexto = "dx/dt = v(t) = v₀ + ∫a(t)dt";
+            descripcion = "Velocidad instantánea";
+            explicacion = "Para obtener la velocidad, se debe integrar la función de aceleración y sumar la velocidad inicial.";
+            break;
+        case "velocidad":
+            derivadaTexto = `dv/dt = a(t) = ${funcionAceleracion}`;
+            descripcion = "Aceleración instantánea";
+            explicacion = "La derivada de la velocidad es directamente la función de aceleración proporcionada.";
+            break;
+        case "aceleracion":
+            // Intentar calcular la derivada de la función de aceleración usando math.js
+            try {
+                const expr = math.parse(funcionAceleracion);
+                const derivada = math.derivative(expr, 't');
+                derivadaTexto = `da/dt = ${derivada.toString()}`;
+                explicacion = "Derivada calculada analíticamente de la función de aceleración.";
+            } catch (error) {
+                derivadaTexto = `da/dt = d/dt[${funcionAceleracion}]`;
+                explicacion = "No se pudo calcular la derivada analíticamente. Use el método numérico para obtener valores aproximados.";
+            }
+            descripcion = "Jerk (cambio de aceleración)";
+            break;
+    }
+    
+    elementoResultados.innerHTML = `
+        <h4>Cálculo Analítico de la Derivada</h4>
+        <div class="resultado-derivada">
+            <p><strong>Función derivada:</strong> ${tipoFuncion.charAt(0).toUpperCase() + tipoFuncion.slice(1)}</p>
+            <p><strong>Método:</strong> Derivación Analítica (Aceleración Variable)</p>
+            <p><strong>Función de aceleración:</strong> a(t) = ${funcionAceleracion}</p>
+            <p><strong>Derivada:</strong> ${derivadaTexto}</p>
+            <p><strong>Interpretación física:</strong> ${descripcion}</p>
+            <p><strong>Explicación:</strong> ${explicacion}</p>
+            ${tipoFuncion === "posicion" ? `<p><strong>Velocidad inicial:</strong> v₀ = ${velocidadInicial} m/s</p>` : ''}
+        </div>
+    `;
+    
+    document.getElementById("seccion-derivadas").style.display = "block";
+}
+
 function mostrarEcuaciones() {
     const velocidadInicial = parseFloat(document.getElementById("velocidad").value);
     const tiempoFinal = tiempoActual;
@@ -559,6 +777,7 @@ function reiniciarSimulacion() {
     document.getElementById("controles-tiempo-real").style.display = "none";
     document.getElementById("controles-integrales").style.display = "none";
     document.getElementById("seccion-integrales").style.display = "none";
+    document.getElementById("seccion-derivadas").style.display = "none";
 
     // Reiniciar valores
     document.getElementById("auto").style.left = "0px";
@@ -617,7 +836,10 @@ function calcularYMostrarEstadisticas() {
     
     // Copiar el tipo de movimiento de la sección dinámica a la sección de estadísticas
     const tipoMovimientoActual = document.getElementById("tipoMovimiento").innerText;
-    document.getElementById("estadisticas").querySelector("#tipoMovimiento").innerText = tipoMovimientoActual;
+    const tipoMovimientoEstadisticas = document.querySelector("#estadisticas #tipoMovimiento");
+    if (tipoMovimientoEstadisticas) {
+        tipoMovimientoEstadisticas.innerText = tipoMovimientoActual;
+    }
 
     // Mostrar el div de estadísticas
     document.getElementById("estadisticas").style.display = "block";

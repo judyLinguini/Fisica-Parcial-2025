@@ -85,7 +85,7 @@
     </div>
 
     <div id="controles-integrales" style="display: none;">
-        <h3>Cálculo de Integrales</h3>
+        <h3>Cálculo de Integrales y Derivadas</h3>
         <div class="integrales-inputs">
             <label for="tipo-funcion-integral">Función a integrar:</label>
             <select id="tipo-funcion-integral">
@@ -93,17 +93,37 @@
                 <option value="posicion">Posición (x)</option>
                 <option value="aceleracion">Aceleración (a)</option>
             </select>
-            
+
             <div class="integrales-botones">
                 <button onclick="calcularIntegrales()" class="btn-integral">Calcular Integral (Numérico)</button>
-                <button onclick="calcularIntegralAnaliticamente()" class="btn-integral">Calcular Integral (Analítico)</button>
+                <button onclick="calcularIntegralAnaliticamente()" class="btn-integral">Calcular Integral
+                    (Analítico)</button>
+            </div>
+        </div>
+
+        <div class="derivadas-inputs">
+            <label for="tipo-funcion-derivada">Función a derivar:</label>
+            <select id="tipo-funcion-derivada">
+                <option value="posicion">Posición (x)</option>
+                <option value="velocidad">Velocidad (v)</option>
+                <option value="aceleracion">Aceleración (a)</option>
+            </select>
+
+            <div class="derivadas-botones">
+                <button onclick="calcularDerivadas()" class="btn-derivada">Calcular Derivada (Numérico)</button>
+                <button onclick="calcularDerivadaAnaliticamente()" class="btn-derivada">Calcular Derivada
+                    (Analítico)</button>
             </div>
         </div>
     </div>
 
     <div id="seccion-integrales" style="display: none;">
         <div id="resultados-integrales">
-            <!-- Los resultados se mostrarán aquí dinámicamente -->
+        </div>
+    </div>
+
+    <div id="seccion-derivadas" style="display: none;">
+        <div id="resultados-derivadas">
         </div>
     </div>
 
