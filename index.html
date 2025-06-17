@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Movimiento Rectilíneo</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjs@11.8.0/lib/browser/math.min.js"></script>
+</head>
+
+<body>
+    <h1>Simulador de Movimiento Rectilíneo</h1>
+
+    <div class="inputs">
+        <label for="distancia">Distancia (m):</label>
+        <input type="number" id="distancia" min="1" max="1000" value="100"><br>
+
+        <label for="velocidad">Velocidad Inicial (m/s):</label>
+        <input type="number" id="velocidad" min="0" value="10"><br>
+
+        <div id="aceleracion-inputs">
+            <label for="tipo-aceleracion">Tipo de aceleración:</label>
+            <select id="tipo-aceleracion" onchange="cambiarTipoAceleracion()">
+                <option value="constante">Constante</option>
+                <option value="variable">Variable (función del tiempo)</option>
+            </select><br>
+
+            <div id="aceleracion-constante" class="aceleracion-option">
+                <label for="aceleracion">Aceleración (m/s²):</label>
+                <input type="number" id="aceleracion" step="0.1" value="2"><br>
+            </div>
+
+            <div id="aceleracion-variable" class="aceleracion-option" style="display:none;">
+                <label for="funcion-aceleracion">Función de aceleración a(t):</label>
+                <input type="text" id="funcion-aceleracion" value="2" placeholder="Ej: t^2 o 2*sin(t)"><br>
+                <p class="ayuda">Usa 't' para el tiempo. Ejemplos: 2^t, 5*sin(t), 3-0.5*t</p>
+            </div>
+        </div>
+
+        <button id="btn-iniciar" onclick="iniciarSimulacion()">Iniciar Simulación</button>
+        <button onclick="reiniciarSimulacion()">Reiniciar Simulación</button>
+    </div>
+
+    <div class="contenedor-animacion">
+        <div id="auto"></div>
+        <div id="meta" style="position: absolute; right: 0; height: 100%; width: 2px; background-color: black;"></div>
+    </div>
+
+    <div id="controles-tiempo-real" style="display: none;">
+        <h3>Control en tiempo real</h3>
+        <button id="acelerar" onclick="cambiarAceleracionTiempoReal(1)">+ Acelerar</button>
+        <button id="desacelerar" onclick="cambiarAceleracionTiempoReal(-1)">- Desacelerar</button>
+        <span id="aceleracion-actual">Aceleración: 2 m/s²</span>
+    </div>
+
+    <div id="valores-dinamicos">
+        <p><strong>Tiempo:</strong> <span id="tiempo">0.0</span> s</p>
+        <p><strong>Posición:</strong> <span id="posicion">0.0</span> m</p>
+        <p><strong>Velocidad:</strong> <span id="velocidadActual">0.0</span> m/s</p>
+        <p><strong>Aceleración:</strong> <span id="aceleracionActual">0.0</span> m/s²</p>
+        <p><strong>Tipo de movimiento por aceleración actual:</strong> <span id="tipoMovimiento">-</span></p>
+    </div>
+
+    <div id="estadisticas" style="display: none;">
+        <h3>Datos Estadísticos</h3>
+        <div id="valores-estadisticos">
+            <p><strong>Velocidad media:</strong> <span id="velocidadMedia">0.0</span> m/s</p>
+            <p><strong>Aceleración media:</strong> <span id="aceleracionMedia">0.0</span> m/s²</p>
+            <p><strong>Tiempo total:</strong> <span id="tiempoTotal">0.0</span> s</p>
+            <p><strong>Distancia recorrida:</strong> <span id="distanciaRecorrida">0.0</span> m</p>
+            <p><strong>Velocidad máxima:</strong> <span id="velocidadMaxima">0.0</span> m/s</p>
+            <p><strong>Aceleración máxima:</strong> <span id="aceleracionMaxima">0.0</span> m/s²</p>
+            <p><strong>Tipo de movimiento por aceleración final:</strong> <span id="tipoMovimiento">-</span></p>
+        </div>
+    </div>
+
+    <canvas id="graficoMov"></canvas>
+
+    <div class="toggle-buttons">
+        <button onclick="toggleDataset(0)">Velocidad</button>
+        <button onclick="toggleDataset(1)">Posición</button>
+        <button onclick="toggleDataset(2)">Aceleración</button>
+    </div>
+
+    <div id="ecuaciones" class="ecuaciones">
+        <h2>Ecuaciones Utilizadas</h2>
+        <p id="ecuaciones-texto"></p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

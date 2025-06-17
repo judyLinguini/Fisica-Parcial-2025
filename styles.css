@@ -1,0 +1,209 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+}
+
+.inputs {
+    margin: 20px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    font-weight: bold;
+    display: inline-block;
+    width: 180px;
+    text-align: right;
+    margin-right: 10px;
+}
+
+input,
+select {
+    margin: 5px 0;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 150px;
+}
+
+button {
+    margin-top: 15px;
+    margin-right: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.contenedor-animacion {
+    width: 80%;
+    height: 100px;
+    border: 2px solid black;
+    position: relative;
+    background-color: lightgray;
+    margin: 20px auto;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+#auto {
+    width: 30px;
+    height: 30px;
+    background-color: red;
+    position: absolute;
+    top: 35px;
+    left: 0;
+    border-radius: 50%;
+    transition: left 0.1s linear;
+    z-index: 2;
+}
+
+canvas {
+    width: 80%;
+    height: 300px;
+    margin: 20px auto;
+    display: block;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#valores-dinamicos {
+    background-color: white;
+    border: 1px solid #ccc;
+    width: 50%;
+    margin: 15px auto;
+    padding: 15px;
+    text-align: left;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+#valores-dinamicos p {
+    margin: 8px 0;
+    font-size: 16px;
+}
+
+.toggle-buttons {
+    margin: 15px auto;
+}
+
+.toggle-buttons button {
+    margin: 5px;
+    padding: 8px 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.toggle-buttons button:hover {
+    background-color: #1e7e34;
+}
+
+.toggle-buttons button.inactive {
+    background-color: #6c757d;
+}
+
+#ecuaciones {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ccc;
+    text-align: left;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+#ecuaciones h2 {
+    text-align: center;
+    color: #007bff;
+}
+
+#ecuaciones h3 {
+    color: #28a745;
+    margin-top: 20px;
+}
+
+#ecuaciones p {
+    font-size: 16px;
+    line-height: 1.5;
+    font-family: "Courier New", monospace;
+}
+
+.ayuda {
+    font-size: 12px;
+    color: #666;
+    margin-top: 2px;
+}
+
+#controles-tiempo-real {
+    width: 50%;
+    margin: 15px auto;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+#controles-tiempo-real button {
+    margin: 0 10px;
+    padding: 5px 15px;
+    font-size: 14px;
+}
+
+#acelerar {
+    background-color: #28a745;
+}
+
+#desacelerar {
+    background-color: #dc3545;
+}
+
+#aceleracion-actual {
+    display: inline-block;
+    margin-left: 15px;
+    font-weight: bold;
+}
+
+.aceleracion-option {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#estadisticas {
+    background-color: white;
+    border: 1px solid #ccc;
+    width: 50%;
+    margin: 15px auto;
+    padding: 15px;
+    text-align: left;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+#estadisticas h3 {
+    text-align: center;
+    color: #007bff;
+    margin-top: 0;
+}
+
+#valores-estadisticos p {
+    margin: 8px 0;
+    font-size: 16px;
+}
