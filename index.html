@@ -36,6 +36,20 @@
                 <label for="funcion-aceleracion">Función de aceleración a(t):</label>
                 <input type="text" id="funcion-aceleracion" value="2" placeholder="Ej: t^2 o 2*sin(t)"><br>
                 <p class="ayuda">Usa 't' para el tiempo. Ejemplos: 2^t, 5*sin(t), 3-0.5*t</p>
+                <div class="funciones-aceptadas-box">
+                    <h4>Funciones de Aceleración Aceptadas:</h4>
+                    <ul>
+                        <li>**Constantes:** Ej. `5`, `-9.8`</li>
+                        <li>**Polinomios:** Ej. `2*t`, `0.5*t^2 + 3*t - 1`</li>
+                        <li>**Trigonométricas:** Ej. `sin(t)`, `cos(2*t)`, `tan(t/2)`</li>
+                        <li>**Exponenciales:** Ej. `exp(t)`, `2^t` (usa `pow(2,t)` o simplemente `2^t`)</li>
+                        <li>**Logarítmicas:** Ej. `log(t)`, `log10(t)` (para logaritmo natural y base 10)</li>
+                        <li>**Combinaciones:** Ej. `2*t + 5*sin(t)`, `exp(-t) * cos(t)`</li>
+                        <li>**Operadores:** `+`, `-`, `*`, `/`, `^` (potencia)</li>
+                        <li>**Variables:** Solo se acepta `t` para el tiempo.</li>
+                    </ul>
+                    <p class="nota">Asegúrate de usar 't' como variable para el tiempo.</p>
+                </div>
             </div>
         </div>
 

@@ -207,3 +207,35 @@ canvas {
     margin: 8px 0;
     font-size: 16px;
 }
+
+/* Nuevos estilos para el recuadro de funciones aceptadas */
+.funciones-aceptadas-box {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 5px;
+    text-align: left; /* Alinea el texto a la izquierda dentro del recuadro */
+}
+
+.funciones-aceptadas-box h4 {
+    margin-top: 0;
+    color: #333;
+    text-align: center; /* Centra el título dentro del recuadro */
+}
+
+.funciones-aceptadas-box ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    padding-left: 0;
+}
+
+.funciones-aceptadas-box li {
+    margin-bottom: 5px;
+}
+
+.funciones-aceptadas-box .nota {
+    font-style: italic;
+    color: #666;
+    margin-top: 10px;
+}
