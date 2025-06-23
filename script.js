@@ -6,7 +6,7 @@ let enSimulacion = false;
 let tiempoActual = 0;
 let velocidadActual = 0;
 let posicionActual = 0;
-let valorAceleracionVariable = 0;
+let valorAceleracionVariable = 0; // Esta variable parece no usarse, se puede revisar
 let distanciaTotal = 0;
 
 // Datos para el gráfico
@@ -430,7 +430,7 @@ function calcularIntegralAnaliticaConstante(tipoFuncion, elementoResultados) {
             // v(t) = v₀ + at
             // ∫v(t)dt = v₀t + (1/2)at²
             integral = velocidadInicial * tiempoFinal + 0.5 * aceleracion * Math.pow(tiempoFinal, 2);
-            formula = `Integral(v(t)dt) = ${velocidadInicial}t + (1/2)*${aceleracion}*t^2`;
+            formula = `Integral(v(t)dt) = ${velocidadInicial}t + 0.5 * ${aceleracion} * t²`;
             unidades = "m";
             descripcion = "Desplazamiento total";
             break;
@@ -438,7 +438,7 @@ function calcularIntegralAnaliticaConstante(tipoFuncion, elementoResultados) {
             // a(t) = a (constante)
             // ∫a dt = at
             integral = aceleracion * tiempoFinal;
-            formula = `Integral(a(t)dt) = ${aceleracion}*t`;
+            formula = `Integral(a(t)dt) = ${aceleracion} * t`;
             unidades = "m/s";
             descripcion = "Cambio total de velocidad";
             break;
@@ -446,7 +446,7 @@ function calcularIntegralAnaliticaConstante(tipoFuncion, elementoResultados) {
             // x(t) = x₀ + v₀t + (1/2)at²
             // ∫x(t)dt = x₀t + (1/2)v₀t² + (1/6)at³
             integral = 0.5 * velocidadInicial * Math.pow(tiempoFinal, 2) + (1/6) * aceleracion * Math.pow(tiempoFinal, 3);
-            formula = `Integral(x(t)dt) = (1/2)*${velocidadInicial}*t^2 + (1/6)*${aceleracion}*t^3`;
+            formula = `Integral(x(t)dt) = 0.5 * ${velocidadInicial} * t² + (1/6) * ${aceleracion} * t³`;
             unidades = "m·s";
             descripcion = "Área bajo la curva de posición";
             break;
@@ -457,7 +457,7 @@ function calcularIntegralAnaliticaConstante(tipoFuncion, elementoResultados) {
         <div class="resultado-integral">
             <p><strong>Función integrada:</strong> ${tipoFuncion.charAt(0).toUpperCase() + tipoFuncion.slice(1)}</p>
             <p><strong>Método:</strong> Integración Analítica</p>
-            <p><strong>Fórmula:</strong> ${formula}</p>
+            <p><strong>Fórmula:</strong> $<span class="math-inline">\{formula\}</span></p>
             <p><strong>Evaluada en [0, ${tiempoFinal.toFixed(2)}]:</strong> ${integral.toFixed(4)} ${unidades}</p>
             <p><strong>Interpretación física:</strong> ${descripcion}</p>
         </div>
@@ -475,7 +475,7 @@ function calcularIntegralAnaliticaVariable(tipoFuncion, elementoResultados) {
         <div class="resultado-integral">
             <p><strong>Función integrada:</strong> ${tipoFuncion.charAt(0).toUpperCase() + tipoFuncion.slice(1)}</p>
             <p><strong>Método:</strong> Integración Analítica (Aceleración Variable)</p>
-            <p><strong>Función de aceleración:</strong> a(t) = ${funcionAceleracion}</p>
+            <p><strong>Función de aceleración:</strong> $a(t) = <span class="math-inline">\{funcionAceleracion\}</span></p>
             <p><strong>Nota:</strong> La integración analítica para funciones de aceleración variables complejas requiere un software de álgebra simbólica. El simulador calcula estos valores numéricamente.</p>
             <p><strong>Sugerencia:</strong> Use el método numérico (Regla del Trapecio) para obtener un resultado aproximado para la función específica ingresada.</p>
         </div>
@@ -555,8 +555,8 @@ function calcularDerivadas() {
         <div class="detalles-calculo-derivada">
             <h5>Detalles del Cálculo</h5>
             <p>La derivada se calculó usando diferencias finitas con la fórmula:</p>
-            <p class="formula">f'(t) approx [f(t_final) - f(t_inicial)] / (t_final - t_inicial)</p>
-            <p>Donde Delta t = ${(datosTiempo[1] - datosTiempo[0]).toFixed(1)} segundos</p>
+            <p class="formula"><span class="math-inline">f'\(t\) \\\\approx \[f\(t\_\{final\}\) \- f\(t\_\{inicial\}\)\] / \(t\_\{final\} \- t\_\{inicial\}\)</span></p>
+            <p>Donde $\\Delta t = <span class="math-inline">\{\(datosTiempo\[1\] \- datosTiempo\[0\]\)\.toFixed\(1\)\}</span> segundos</p>
         </div>
     `;
 
@@ -607,31 +607,31 @@ function calcularDerivadaAnaliticaConstante(tipoFuncion, elementoResultados) {
 
     switch (tipoFuncion) {
         case "posicion":
-            // x(t) = x₀ + v₀t + (1/2)at²
+            // x(t) = x₀ + v₀t + 0.5at²
             // dx/dt = v₀ + at
-            formula = `d/dt[x0 + ${velocidadInicial}t + (1/2) * ${aceleracion} * t^2] = ${velocidadInicial} + ${aceleracion}t`;
+            formula = `d/dt[x₀ + ${velocidadInicial}t + 0.5 * ${aceleracion} * t²] = ${velocidadInicial} + ${aceleracion}t`;
             derivada = `v(t) = ${velocidadInicial} + ${aceleracion}t`;
             unidades = "m/s";
             descripcion = "Velocidad instantánea";
-            valorConstante = `Función lineal con pendiente ${aceleracion} m/s^2 y ordenada ${velocidadInicial} m/s`;
+            valorConstante = `Función lineal con pendiente ${aceleracion} m/s² y ordenada ${velocidadInicial} m/s`;
             break;
         case "velocidad":
             // v(t) = v₀ + at
             // dv/dt = a
             formula = `d/dt[${velocidadInicial} + ${aceleracion}t] = ${aceleracion}`;
             derivada = `a(t) = ${aceleracion}`;
-            unidades = "m/s^2";
+            unidades = "m/s²";
             descripcion = "Aceleración instantánea";
-            valorConstante = `Aceleración constante: ${aceleracion} m/s^2`;
+            valorConstante = `Aceleración constante: ${aceleracion} m/s²`;
             break;
         case "aceleracion":
             // a(t) = a (constante)
             // da/dt = 0
             formula = `d/dt[${aceleracion}] = 0`;
             derivada = `jerk(t) = 0`;
-            unidades = "m/s^3";
+            unidades = "m/s³";
             descripcion = "Jerk (cambio de aceleración)";
-            valorConstante = `Jerk = 0 m/s^3 (aceleración constante)`;
+            valorConstante = `Jerk = 0 m/s³ (aceleración constante)`;
             break;
     }
 
@@ -641,8 +641,8 @@ function calcularDerivadaAnaliticaConstante(tipoFuncion, elementoResultados) {
             <p><strong>Función derivada:</strong> ${tipoFuncion.charAt(0).toUpperCase() + tipoFuncion.slice(1)}</p>
             <p><strong>Método:</strong> Derivación Analítica</p>
             <p><strong>Función original:</strong> Según ecuaciones de MRUA</p>
-            <p><strong>Cálculo:</strong> ${formula}</p>
-            <p><strong>Resultado:</strong> ${derivada}</p>
+            <p><strong>Cálculo:</strong> $<span class="math-inline">\{formula\}</span></p>
+            <p><strong>Resultado:</strong> $<span class="math-inline">\{derivada\}</span></p>
             <p><strong>Unidades:</strong> ${unidades}</p>
             <p><strong>Interpretación física:</strong> ${descripcion}</p>
             <p><strong>Descripción:</strong> ${valorConstante}</p>
@@ -691,11 +691,11 @@ function calcularDerivadaAnaliticaVariable(tipoFuncion, elementoResultados) {
         <div class="resultado-derivada">
             <p><strong>Función derivada:</strong> ${tipoFuncion.charAt(0).toUpperCase() + tipoFuncion.slice(1)}</p>
             <p><strong>Método:</strong> Derivación Analítica (Aceleración Variable)</p>
-            <p><strong>Función de aceleración base:</strong> a(t) = ${funcionAceleracion}</p>
-            <p><strong>Derivada:</strong> ${derivadaTexto}</p>
+            <p><strong>Función de aceleración base:</strong> $a(t) = <span class="math-inline">\{funcionAceleracion\}</span></p>
+            <p><strong>Derivada:</strong> $<span class="math-inline">\{derivadaTexto\}</span></p>
             <p><strong>Interpretación física:</strong> ${descripcion}</p>
             <p><strong>Explicación:</strong> ${explicacion}</p>
-            ${tipoFuncion === "posicion" ? `<p><strong>Velocidad inicial:</strong> v0 = ${velocidadInicial} m/s</p>` : ''}
+            ${tipoFuncion === "posicion" ? `<p><strong>Velocidad inicial:</strong> $v₀ = ${velocidadInicial}$ m/s</p>` : ''}
         </div>
     `;
 
@@ -705,73 +705,201 @@ function calcularDerivadaAnaliticaVariable(tipoFuncion, elementoResultados) {
 
 /**
  * Intenta integrar simbólicamente expresiones polinómicas simples y devuelve las funciones de velocidad y posición.
- * Soporta: constantes, c*t, c*t^2
+ * Soporta: constantes, c*t, c*t^n (n entero), c*sin(t), c*cos(t), c*exp(t).
+ * También maneja sumas y restas de estos términos.
  * @param {string} accelerationExpression La expresión de la aceleración a(t)
  * @param {number} initialVelocity La velocidad inicial v0
  * @param {number} initialPosition La posición inicial x0
- * @returns {{velocityFn: string, positionFn: string, success: boolean}} Objeto con las funciones de velocidad y posición como strings y un indicador de éxito.
+ * @returns {{velocityExpression: string, positionExpression: string, success: boolean}} Objeto con las expresiones de velocidad y posición como strings (solo RHS) y un indicador de éxito.
  */
 function getSymbolicIntegratedFunctions(accelerationExpression, initialVelocity, initialPosition) {
-    let velocityFunction = `v(t) = ${initialVelocity} + Integral(a(t)dt)`;
-    let positionFunction = `x(t) = ${initialPosition} + Integral(v(t)dt)`;
-    let success = false;
+    let velocityExpression = `v₀ + \\int a(t)dt`;
+    let positionExpression = `x₀ + \\int v(t)dt`;
+    let successVelocity = false;
+    let successPosition = false;
+
+    console.log("Attempting symbolic integration for acceleration expression:", accelerationExpression);
 
     try {
-        const node = math.parse(accelerationExpression);
+        const nodeAceleracion = math.parse(accelerationExpression);
+        console.log("Parsed acceleration node (a(t)):", nodeAceleracion.toString(), "Type:", nodeAceleracion.type);
 
-        // Caso: a(t) = C (constante)
-        if (node.type === 'ConstantNode' || (node.type === 'OperatorNode' && node.fn === 'unaryminus')) {
-            const C = math.evaluate(accelerationExpression, {t: 0}); // Evaluar la constante
-            velocityFunction = `v(t) = ${initialVelocity} + ${C}*t`;
-            positionFunction = `x(t) = ${initialPosition} + ${initialVelocity}*t + (1/2)*${C}*t^2`;
-            success = true;
-        }
-        // Caso: a(t) = C*t
-        else if (node.type === 'OperatorNode' && node.op === '*' && node.args[1] && node.args[1].type === 'SymbolNode' && node.args[1].name === 't' && node.args[0].type === 'ConstantNode') {
-            const C = node.args[0].value;
-            velocityFunction = `v(t) = ${initialVelocity} + (1/2)*${C}*t^2`;
-            positionFunction = `x(t) = ${initialPosition} + ${initialVelocity}*t + (1/6)*${C}*t^3`;
-            success = true;
-        }
-        // Caso: a(t) = C*t^2
-        else if (node.type === 'OperatorNode' && node.op === '*' && node.args[1] && node.args[1].type === 'OperatorNode' && node.args[1].op === '^' && node.args[1].args[0] && node.args[1].args[0].type === 'SymbolNode' && node.args[1].args[0].name === 't' && node.args[1].args[1].type === 'ConstantNode' && node.args[1].args[1].value === 2 && node.args[0].type === 'ConstantNode') {
-            const C = node.args[0].value;
-            velocityFunction = `v(t) = ${initialVelocity} + (1/3)*${C}*t^3`;
-            positionFunction = `x(t) = ${initialPosition} + ${initialVelocity}*t + (1/12)*${C}*t^4`;
-            success = true;
-        }
-        // Caso: a(t) = t (asume 1*t)
-        else if (node.type === 'SymbolNode' && node.name === 't') {
-            velocityFunction = `v(t) = ${initialVelocity} + (1/2)*t^2`;
-            positionFunction = `x(t) = ${initialPosition} + ${initialVelocity}*t + (1/6)*t^3`;
-            success = true;
-        }
-        // Caso: a(t) = t^2 (asume 1*t^2)
-        else if (node.type === 'OperatorNode' && node.op === '^' && node.args[0] && node.args[0].type === 'SymbolNode' && node.args[0].name === 't' && node.args[1].type === 'ConstantNode' && node.args[1].value === 2) {
-            velocityFunction = `v(t) = ${initialVelocity} + (1/3)*t^3`;
-            positionFunction = `x(t) = ${initialPosition} + ${initialVelocity}*t + (1/12)*t^4`;
-            success = true;
-        }
-        // Puedes añadir más casos aquí para funciones simples como sen(t), cos(t), exp(t)
-        // Por ejemplo, para sin(t):
-        else if (node.type === 'FunctionNode' && node.name === 'sin' && node.args[0] && node.args[0].type === 'SymbolNode' && node.args[0].name === 't') {
-            velocityFunction = `v(t) = ${initialVelocity} - cos(t) + ${math.cos(0)}`; // + C (valor para t=0)
-            positionFunction = `x(t) = ${initialPosition} + ${initialVelocity}*t - sin(t) + ${math.cos(0)}*t - ${math.sin(0)}`; // Ajustar constante de integración
-            success = true;
-        }
-        // Para cos(t):
-        else if (node.type === 'FunctionNode' && node.name === 'cos' && node.args[0] && node.args[0].type === 'SymbolNode' && node.args[0].name === 't') {
-            velocityFunction = `v(t) = ${initialVelocity} + sin(t) - ${math.sin(0)}`; // + C (valor para t=0)
-            positionFunction = `x(t) = ${initialPosition} + ${initialVelocity}*t - cos(t) + ${math.sin(0)}*t + ${math.cos(0)}`; // Ajustar constante de integración
-            success = true;
-        }
+        const integratedAcelerationNode = integrateNode(nodeAceleracion, 't');
+        console.log("Result of integrateNode for acceleration:", integratedAcelerationNode ? integratedAcelerationNode.toString() : 'NULL');
 
+
+        if (integratedAcelerationNode) {
+            console.log("Integrated acceleration node (raw):", integratedAcelerationNode.toString());
+            let simplifiedIntegratedAceleration = math.simplify(integratedAcelerationNode).toString();
+            // Si la expresión es vacía después de simplificar (ej. integral de 0), ajustarla a "0"
+            if (simplifiedIntegratedAceleration.trim() === '') {
+                simplifiedIntegratedAceleration = '0';
+            }
+            console.log("Integrated acceleration node (simplified):", simplifiedIntegratedAceleration);
+
+
+            // Construir la función de velocidad con v0 usando toString()
+            let velocityExprNode = math.parse(`<span class="math-inline">\{initialVelocity\} \+ \(</span>{simplifiedIntegratedAceleration})`);
+            velocityExprNode = math.simplify(velocityExprNode); // Simplificar la expresión de velocidad también
+            velocityExpression = velocityExprNode.toString(); // Usar toString()
+            successVelocity = true;
+            console.log("Calculated velocity expression:", velocityExpression);
+
+
+            // Intentar integrar la función de velocidad para obtener la posición
+            const integratedVelocityNode = integrateNode(velocityExprNode, 't');
+            console.log("Result of integrateNode for velocity:", integratedVelocityNode ? integratedVelocityNode.toString() : 'NULL');
+
+            if (integratedVelocityNode) {
+                console.log("Integrated velocity node (raw):", integratedVelocityNode.toString());
+                let simplifiedIntegratedVelocity = math.simplify(integratedVelocityNode).toString();
+                if (simplifiedIntegratedVelocity.trim() === '') {
+                    simplifiedIntegratedVelocity = '0';
+                }
+                console.log("Integrated velocity node (simplified):", simplifiedIntegratedVelocity);
+
+
+                // Construir la función de posición con x0 usando toString()
+                let positionExprNode = math.parse(`<span class="math-inline">\{initialPosition\} \+ \(</span>{simplifiedIntegratedVelocity})`);
+                positionExprNode = math.simplify(positionExprNode); // Simplificar la expresión de posición también
+                positionExpression = positionExprNode.toString(); // Usar toString()
+                successPosition = true;
+                console.log("Calculated position expression:", positionExpression);
+            } else {
+                console.log("integratedVelocityNode is NULL. successPosition remains false.");
+            }
+        } else {
+            console.log("integratedAcelerationNode is NULL. successVelocity remains false.");
+        }
     } catch (e) {
-        // console.warn("No se pudo parsear o integrar simbólicamente la expresión:", accelerationExpression, e);
-        success = false;
+        console.error("Error in getSymbolicIntegratedFunctions:", e);
+        // Fallback a las integrales no resueltas si hay algún error
+        successVelocity = false;
+        successPosition = false;
     }
 
-    return { velocityFn: velocityFunction, positionFn: positionFunction, success: success };
+    console.log("Symbolic integration final success:", successVelocity && successPosition);
+    return {
+        // Los strings son solo la RHS de la expresión
+        velocityExpression: successVelocity ? velocityExpression : `v₀ + \\int a(t)dt \\text{ (No analitica, use numérico)}`,
+        positionExpression: successPosition ? positionExpression : `x₀ + \\int v(t)dt \\text{ (No analitica, use numérico)}`,
+        success: successVelocity && successPosition // Solo éxito si ambas integraciones fueron analíticas
+    };
+}
+
+
+/**
+ * Intenta integrar un nodo de math.js. Función auxiliar para getSymbolicIntegratedFunctions.
+ * Implementa reglas básicas de integración para polinomios, senos, cosenos, exponenciales.
+ * @param {math.MathNode} node El nodo de la expresión a integrar.
+ * @param {string} variable La variable de integración (e.g., 't').
+ * @returns {math.MathNode | null} El nodo de la integral o null si no se puede integrar.
+ */
+function integrateNode(node, variable) {
+    console.log(`[integrateNode] Integrating: ${node.toString()} (Type: ${node.type})`);
+
+    if (node.type === 'ConstantNode') {
+        // Integral de una constante C es C*variable
+        // Asegúrate de que 0 se integre a 0, no a 0*t
+        if (node.value === 0) {
+            const result = new math.ConstantNode(0);
+            console.log(`[integrateNode] Constant 0 integral result: ${result.toString()}`);
+            return result;
+        }
+        const result = new math.OperatorNode(new math.ConstantNode(node.value), '*', new math.SymbolNode(variable));
+        console.log(`[integrateNode] Constant integral result: ${result.toString()}`);
+        return result;
+    } else if (node.type === 'SymbolNode' && node.name === variable) {
+        // Integral de t es (1/2)*t^2
+        const result = new math.OperatorNode(new math.OperatorNode(new math.ConstantNode(1), '/', new math.ConstantNode(2)), '*', new math.OperatorNode(new math.SymbolNode(variable), '^', new math.ConstantNode(2)));
+        console.log(`[integrateNode] Symbol '${variable}' integral result: ${result.toString()}`);
+        return result;
+    } else if (node.type === 'OperatorNode' && node.op === '^' && node.args[0] && node.args[0].type === 'SymbolNode' && node.args[0].name === variable && node.args[1] && node.args[1].type === 'ConstantNode') {
+        // Integral de t^n es (1/(n+1))*t^(n+1)
+        const power = node.args[1].value;
+        const newPower = power + 1;
+        const coefficient = new math.Fraction(1, newPower);
+        const result = new math.OperatorNode(new math.ConstantNode(coefficient.valueOf()), '*', new math.OperatorNode(new math.SymbolNode(variable), '^', new math.ConstantNode(newPower)));
+        console.log(`[integrateNode] Power integral result: ${result.toString()}`);
+        return result;
+    } else if (node.type === 'OperatorNode' && node.op === '*' && node.args.length === 2) {
+        // Integral de C*f(t) es C*Integral(f(t))
+        let constantNode = null;
+        let funcNode = null;
+
+        // Identificar la constante y la función. La constante puede estar a la izquierda o derecha.
+        if (node.args[0].type === 'ConstantNode') {
+            constantNode = node.args[0];
+            funcNode = node.args[1];
+        } else if (node.args[1].type === 'ConstantNode') {
+            constantNode = node.args[1];
+            funcNode = node.args[0];
+        }
+
+        if (constantNode && funcNode) {
+            console.log(`[integrateNode] Found constant-function product: Constant=<span class="math-inline">\{constantNode\.toString\(\)\} Function\=</span>{funcNode.toString()}`);
+            const integratedFuncNode = integrateNode(funcNode, variable);
+            if (integratedFuncNode) {
+                // Return C * integral(f(t))
+                const result = new math.OperatorNode(constantNode, '*', integratedFuncNode);
+                console.log(`[integrateNode] Product integral result: ${result.toString()}`);
+                return result;
+            }
+        }
+    } else if (node.type === 'OperatorNode' && (node.op === '+' || node.op === '-')) {
+        // Integral de f(t) +/- g(t) es Integral(f(t)) +/- Integral(g(t))
+        console.log(`[integrateNode] Found sum/difference node. Args: ${node.args.map(a => a.toString())}`);
+        const integratedArgs = node.args.map(arg => integrateNode(arg, variable));
+        if (integratedArgs.every(arg => arg !== null)) {
+            // Reconstruir el nodo con los argumentos integrados
+            let newNode = integratedArgs[0];
+            for (let i = 1; i < integratedArgs.length; i++) {
+                newNode = new math.OperatorNode(newNode, node.op, integratedArgs[i]);
+            }
+            console.log(`[integrateNode] Sum/Difference integral result: ${newNode.toString()}`);
+            return newNode;
+        }
+    } else if (node.type === 'FunctionNode') {
+        // Integrales de funciones trigonométricas/exponenciales simples
+        if (node.name === 'sin' && node.args.length === 1 && node.args[0].type === 'SymbolNode' && node.args[0].name === variable) {
+            // Integral de sin(t) es -cos(t)
+            const result = new math.OperatorNode(new math.ConstantNode(-1), '*', new math.FunctionNode('cos', [new math.SymbolNode(variable)]));
+            console.log(`[integrateNode] Sin integral result: ${result.toString()}`);
+            return result;
+        } else if (node.name === 'cos' && node.args.length === 1 && node.args[0].type === 'SymbolNode' && node.args[0].name === variable) {
+            // Integral de cos(t) es sin(t)
+            const result = new math.FunctionNode('sin', [new math.SymbolNode(variable)]);
+            console.log(`[integrateNode] Cos integral result: ${result.toString()}`);
+            return result;
+        } else if (node.name === 'exp' && node.args.length === 1 && node.args[0].type === 'SymbolNode' && node.args[0].name === variable) {
+            // Integral de exp(t) es exp(t)
+            const result = new math.FunctionNode('exp', [new math.SymbolNode(variable)]);
+            console.log(`[integrateNode] Exp integral result: ${result.toString()}`);
+            return result;
+        } else if (node.name === 'log' && node.args.length === 1 && node.args[0].type === 'SymbolNode' && node.args[0].name === variable) {
+            // Integral de log(t) es t*log(t) - t
+            const result = math.parse(`t * log(t) - t`);
+            console.log(`[integrateNode] Log integral result: ${result.toString()}`);
+            return result;
+        } else if (node.name === 'log10' && node.args.length === 1 && node.args[0].type === 'SymbolNode' && node.args[0].name === variable) {
+            // Integral de log10(t) es t*log10(t) - t/ln(10)
+            const result = math.parse(`t * log10(t) - t / log(10)`);
+            console.log(`[integrateNode] Log10 integral result: ${result.toString()}`);
+            return result;
+        }
+    } else if (node.type === 'OperatorNode' && node.op === 'unaryminus') {
+        // Integral de -f(t) es -Integral(f(t))
+        console.log(`[integrateNode] Found unaryminus node. Arg: ${node.args[0].toString()}`);
+        const integratedArg = integrateNode(node.args[0], variable);
+        if (integratedArg) {
+            const result = new math.OperatorNode(integratedArg, 'unaryminus');
+            console.log(`[integrateNode] Unaryminus integral result: ${result.toString()}`);
+            return result;
+        }
+    }
+
+    console.log(`[integrateNode] Failed to integrate: ${node.toString()} (Type: ${node.type}). Returning NULL.`);
+    return null; // No se pudo integrar
 }
 
 
@@ -787,73 +915,77 @@ function mostrarEcuaciones() {
         const aceleracion = parseFloat(document.getElementById("aceleracion").value);
 
         if (Math.abs(aceleracion) < 0.01) {
-            // Ecuaciones MRU
+            // Ecuaciones MRU (sin $)
             ecuacionesTexto = `
                 <h3>Movimiento Rectilíneo Uniforme (MRU):</h3>
-                <p><strong>Ecuacion de posicion:</strong> x(t) = x0 + v * t</p>
-                <p><strong>Reemplazando:</strong> x(${tiempoFinal.toFixed(2)}) = ${posicionInicial} + ${velocidadInicial} * ${tiempoFinal.toFixed(2)}</p>
-                <p><strong>Valor final:</strong> x(${tiempoFinal.toFixed(2)}) = ${posicionActual.toFixed(2)} m</p>
+                <p><strong>Ecuación de posición:</strong> x(t) = x₀ + v₀t</p>
+                <p><strong>Reemplazando:</strong> x(t) = ${posicionInicial} + ${velocidadInicial} * t</p>
+                <p><strong>Para t = <span class="math-inline">\{tiempoFinal\.toFixed\(2\)\} s\:</strong\> x\(</span>{tiempoFinal.toFixed(2)}) = ${posicionActual.toFixed(2)} m</p>
 
-                <p><strong>Ecuacion de velocidad:</strong> v(t) = v0 (constante)</p>
+                <p><strong>Ecuación de velocidad:</strong> v(t) = v₀ (constante)</p>
                 <p><strong>Valor:</strong> v = ${velocidadInicial} m/s</p>
 
-                <p><strong>Ecuacion de aceleracion:</strong> a(t) = 0 m/s^2 (sin aceleracion)</p>
+                <p><strong>Ecuación de aceleración:</strong> a(t) = 0 m/s² (sin aceleración)</p>
             `;
         } else {
-            // Ecuaciones MRUA
+            // Ecuaciones MRUA (sin $)
             ecuacionesTexto = `
                 <h3>Movimiento Rectilíneo Uniformemente Acelerado (MRUA):</h3>
-                <p><strong>Ecuacion de posicion:</strong> x(t) = x0 + v0 * t + (1/2) * a * t^2</p>
-                <p><strong>Reemplazando:</strong> x(${tiempoFinal.toFixed(2)}) = ${posicionInicial} + ${velocidadInicial} * ${tiempoFinal.toFixed(2)} + (1/2) * ${aceleracion} * ${tiempoFinal.toFixed(2)}^2</p>
-                <p><strong>Valor final:</strong> x(${tiempoFinal.toFixed(2)}) = ${posicionActual.toFixed(2)} m</p>
+                <p><strong>Ecuación de posición:</strong> x(t) = x₀ + v₀t + 0.5 * a * t²</p>
+                <p><strong>Reemplazando:</strong> x(t) = ${posicionInicial} + ${velocidadInicial} * t + 0.5 * ${aceleracion} * t²</p>
+                <p><strong>Para t = <span class="math-inline">\{tiempoFinal\.toFixed\(2\)\} s\:</strong\> x\(</span>{tiempoFinal.toFixed(2)}) = ${posicionActual.toFixed(2)} m</p>
 
-                <p><strong>Ecuacion de velocidad:</strong> v(t) = v0 + a * t</p>
-                <p><strong>Reemplazando:</strong> v(${tiempoFinal.toFixed(2)}) = ${velocidadInicial} + ${aceleracion} * ${tiempoFinal.toFixed(2)}</p>
-                <p><strong>Valor final:</strong> v(${tiempoFinal.toFixed(2)}) = ${velocidadFinal.toFixed(2)} m/s</p>
+                <p><strong>Ecuación de velocidad:</strong> v(t) = v₀ + a * t</p>
+                <p><strong>Reemplazando:</strong> v(t) = ${velocidadInicial} + ${aceleracion} * t</p>
+                <p><strong>Para t = <span class="math-inline">\{tiempoFinal\.toFixed\(2\)\} s\:</strong\> v\(</span>{tiempoFinal.toFixed(2)}) = ${velocidadFinal.toFixed(2)} m/s</p>
 
-                <p><strong>Ecuacion de aceleracion:</strong> a(t) = ${aceleracion} m/s^2 (constante)</p>
+                <p><strong>Ecuación de aceleración:</strong> a(t) = ${aceleracion} m/s² (constante)</p>
             `;
         }
     } else {
-        // Ecuaciones para aceleración variable
+        // Ecuaciones para aceleración variable (con $)
         const funcionAceleracion = document.getElementById("funcion-aceleracion").value;
-        const { velocityFn, positionFn, success } = getSymbolicIntegratedFunctions(funcionAceleracion, velocidadInicial, posicionInicial);
+        const { velocityExpression, positionExpression, success } = getSymbolicIntegratedFunctions(funcionAceleracion, velocidadInicial, posicionInicial);
 
         ecuacionesTexto = `
-            <h3>Movimiento con Aceleracion Variable:</h3>
-            <p><strong>Funcion de aceleracion:</strong> a(t) = ${funcionAceleracion}</p>
+            <h3>Movimiento con Aceleración Variable:</h3>
+            <p><strong>Función de aceleración ingresada:</strong> $a(t) = <span class="math-inline">\{funcionAceleracion\}</span></p>
         `;
 
         if (success) {
+            // Aplicar reemplazos de subíndices y envolver en $ para MathJax
+            const displayVelocityExpression = velocityExpression.replace(/v_0/g, 'v₀').replace(/x_0/g, 'x₀');
+            const displayPositionExpression = positionExpression.replace(/v_0/g, 'v₀').replace(/x_0/g, 'x₀');
+
             ecuacionesTexto += `
-                <p><strong>Ecuacion de velocidad:</strong> ${velocityFn}</p>
-                <p><strong>Valor final:</strong> v(${tiempoFinal.toFixed(2)}) = ${velocidadFinal.toFixed(2)} m/s</p>
-                <p><strong>Ecuacion de posicion:</strong> ${positionFn}</p>
-                <p><strong>Valor final:</strong> x(${tiempoFinal.toFixed(2)}) = ${posicionActual.toFixed(2)} m</p>
-                <p><em>Estas ecuaciones se han derivado analíticamente para una función de aceleración polinómica simple.</em></p>
+                <p><strong>Ecuación de velocidad:</strong> $v(t) = <span class="math-inline">\{displayVelocityExpression\}</span></p>
+                <p><strong>Para t = ${tiempoFinal.toFixed(2)} s:</strong> <span class="math-inline">v\(</span>{tiempoFinal.toFixed(2)}) = <span class="math-inline">\{velocidadFinal\.toFixed\(2\)\}</span> m/s</p>
+                <p><strong>Ecuación de posición:</strong> $x(t) = <span class="math-inline">\{displayPositionExpression\}</span></p>
+                <p><strong>Para t = ${tiempoFinal.toFixed(2)} s:</strong> <span class="math-inline">x\(</span>{tiempoFinal.toFixed(2)}) = <span class="math-inline">\{posicionActual\.toFixed\(2\)\}</span> m</p>
+                <p><em>Estas ecuaciones se han derivado analíticamente.</em></p>
             `;
         } else {
             ecuacionesTexto += `
-                <p><strong>Ecuacion de velocidad:</strong> v(t) = v0 + (integral de a(t) con respecto a t)</p>
-                <p><strong>Velocidad inicial:</strong> v0 = ${velocidadInicial} m/s</p>
-                <p><strong>Velocidad final calculada:</strong> v = ${velocidadFinal.toFixed(2)} m/s</p>
+                <p><strong>Ecuación de velocidad:</strong> <span class="math-inline">v\(t\) \= v₀ \+ \\\\int a\(t\)dt</span></p>
+                <p><strong>Velocidad inicial:</strong> $v₀ = <span class="math-inline">\{velocidadInicial\}</span> m/s</p>
+                <p><strong>Velocidad final calculada (numéricamente):</strong> $v = <span class="math-inline">\{velocidadFinal\.toFixed\(2\)\}</span> m/s</p>
 
-                <p><strong>Ecuacion de posicion:</strong> x(t) = x0 + (integral de v(t) con respecto a t)</p>
-                <p><strong>Posicion final calculada:</strong> x = ${posicionActual.toFixed(2)} m</p>
-                <p><em>Para funciones de aceleración variables complejas, las ecuaciones analíticas de velocidad y posición exactas requieren un software de álgebra simbólica avanzado. La simulación calcula estos valores numéricamente.</em></p>
+                <p><strong>Ecuación de posición:</strong> <span class="math-inline">x\(t\) \= x₀ \+ \\\\int v\(t\)dt</span></p>
+                <p><strong>Posición final calculada (numéricamente):</strong> $x = <span class="math-inline">\{posicionActual\.toFixed\(2\)\}</span> m</p>
+                <p><em>Para funciones de aceleración variables complejas (o cuando no se puede integrar con \`math.js\`), las ecuaciones analíticas de velocidad y posición exactas requieren un software de álgebra simbólica avanzado. La simulación calcula estos valores numéricamente.</em></p>
             `;
         }
     }
 
     // Añadir información sobre cálculos numéricos realizados
     ecuacionesTexto += `
-        <h3>Metodo de calculo numerico utilizado en la simulacion:</h3>
-        <p>Para el calculo de la posicion y velocidad con aceleracion variable (o constante en la simulación paso a paso), se utilizo el metodo de integracion numerica por aproximacion de Euler:</p>
-        <p>- Para cada paso de tiempo Delta t = 0.1s:</p>
-        <p>- v(t + Delta t) = v(t) + a(t) * Delta t</p>
-        <p>- x(t + Delta t) = x(t) + v(t) * Delta t</p>
+        <h3>Método de cálculo numérico utilizado en la simulación:</h3>
+        <p>Para el cálculo de la posición y velocidad con aceleración variable (o constante en la simulación paso a paso), se utilizó el método de integración numérica por aproximación de Euler:</p>
+        <p><span class="math-inline">\\\\text\{Para cada paso de tiempo \} \\\\Delta t \= 0\.1s\:</span></p>
+        <p><span class="math-inline">v\(t \+ \\\\Delta t\) \= v\(t\) \+ a\(t\) \\\\cdot \\\\Delta t</span></p>
+        <p><span class="math-inline">x\(t \+ \\\\Delta t\) \= x\(t\) \+ v\(t\) \\\\cdot \\\\Delta t</span></p>
 
-        <h3>Resumen de la simulacion:</h3>
+        <h3>Resumen de la simulación:</h3>
         <p><strong>Tiempo total:</strong> ${tiempoFinal.toFixed(2)} s</p>
         <p><strong>Distancia recorrida:</strong> ${posicionActual.toFixed(2)} m</p>
         <p><strong>Velocidad inicial:</strong> ${velocidadInicial} m/s</p>
@@ -861,6 +993,14 @@ function mostrarEcuaciones() {
     `;
 
     document.getElementById("ecuaciones-texto").innerHTML = ecuacionesTexto;
+
+    // Renderizar las ecuaciones LaTeX con MathJax
+    // Solo se llama si hay MathJax en el contenido
+    if (window.MathJax) {
+        window.MathJax.typesetPromise().then(() => {
+            // Optional: Do something after typesetting if needed
+        }).catch((err) => console.error('MathJax typesetting failed:', err));
+    }
 }
 
 function reiniciarSimulacion() {
@@ -940,4 +1080,9 @@ function calcularYMostrarEstadisticas() {
 
 window.onload = function () {
     cambiarTipoAceleracion();
+    // Cargar MathJax una vez que el DOM esté listo
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+    script.async = true;
+    document.head.appendChild(script);
 };
