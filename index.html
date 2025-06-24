@@ -35,20 +35,57 @@
             <div id="aceleracion-variable" class="aceleracion-option" style="display:none;">
                 <label for="funcion-aceleracion">Función de aceleración a(t):</label>
                 <input type="text" id="funcion-aceleracion" value="2" placeholder="Ej: t^2 o 2*sin(t)"><br>
-                <p class="ayuda">Usa 't' para el tiempo. Ejemplos: 2^t, 5*sin(t), 3-0.5*t</p>
                 <div class="funciones-aceptadas-box">
                     <h4>Funciones de Aceleración Aceptadas:</h4>
                     <ul>
                         <li><strong>Constantes:</strong> Ej. `5`, `-9.8`</li>
                         <li><strong>Polinomios:</strong> Ej. `2*t`, `0.5*t^2 + 3*t - 1`</li>
                         <li><strong>Trigonométricas:</strong> Ej. `sin(t)`, `cos(2*t)`, `tan(t/2)`</li>
+                        <li><strong>Hiperbólicas:</strong> Ej. `sinh(t)`, `cosh(t)`, `tanh(t)`.
+                            <br>
+                            <p class="nota">
+                                <strong>Nota:</strong> Estas funciones se procesan numéricamente, pero el simulador actual
+                                <strong>no puede derivar sus ecuaciones de velocidad y posición analíticamente</strong>.
+                                Solo se mostrarán los resultados numéricos para velocidad y posición.
+                            </p>
+                        </li>
                         <li><strong>Exponenciales:</strong> Ej. `exp(t)`, `2^t` (usa `pow(2,t)` o simplemente `2^t`)</li>
-                        <li><strong>Logarítmicas:</strong> Ej. `log(t)`, `log10(t)` (para logaritmo natural y base 10)</li>
+                        <li><strong>Logarítmicas:</strong> Ej. `log(t)`, `log10(t)` (para logaritmo natural y base 10).
+                            <br>
+                            <p class="nota">
+                                <strong>Nota Importante:</strong> Aunque el simulador puede integrar estas funciones simbólicamente,
+                                el comportamiento de `log(t)` y `log10(t)` cuando `t` se acerca o es igual a `0` (indefinido o $-\infty$)
+                                puede llevar a <strong>valores irrisorios o `NaN`</strong> en la simulación.
+                            </p>
+                        </li>
                         <li><strong>Combinaciones:</strong> Ej. `2*t + 5*sin(t)`, `exp(-t) * cos(t)`</li>
                         <li><strong>Operadores:</strong> `+`, `-`, `*`, `/`, `^` (potencia)</li>
                         <li><strong>Variables:</strong> Solo se acepta `t` para el tiempo.</li>
                     </ul>
                     <p class="nota">Asegúrate de usar 't' como variable para el tiempo.</p>
+
+                    <h4>Consideraciones Importantes / Posibles Problemas:</h4>
+                    <ul>
+                        <li>
+                            <strong>Funciones con Restricciones de Dominio o Valores Indefinidos:</strong>
+                            Funciones como `sqrt(t)` (raíz cuadrada de números negativos) o funciones trigonométricas inversas
+                            (`asin(t)`, `acos(t)`) fuera de su rango de entrada válido (`-1` a `1`) pueden producir `NaN` (Not a Number)
+                            o resultados complejos no deseados, que la simulación numérica no interpretará correctamente.
+                        </li>
+                        <li>
+                            <strong>División por Cero:</strong>
+                            Expresiones que involucren división donde el denominador pueda llegar a ser cero (ej. `1/t`, `1/(t-5)`)
+                            provocarán una aceleración `Infinity` o `NaN` en el punto de división, lo que detendrá la simulación
+                            o producirá resultados erróneos.
+                        </li>
+                        <li>
+                            <strong>Integración Simbólica Limitada:</strong>
+                            Aunque la simulación numérica puede evaluar casi cualquier función, la derivación analítica
+                            (mostrar la ecuación exacta de velocidad y posición) está limitada a las funciones más comunes
+                            y combinaciones simples (polinomios, senos, cosenos, exponenciales, logaritmos simples, etc.).
+                            Funciones más complejas (ej. `t*sin(t)`, `sin(t^2)`, o las hiperbólicas) solo mostrarán resultados numéricos.
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
