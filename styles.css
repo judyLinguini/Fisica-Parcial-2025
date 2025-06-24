@@ -6,165 +6,200 @@ body {
     padding: 20px;
 }
 
+/* Estilos para el Navbar */
+.navbar {
+    background-color: #333;
+    overflow: hidden;
+    margin-bottom: 20px; /* Espacio debajo del navbar */
+    border-radius: 8px; /* Bordes redondeados para el navbar */
+    display: flex; /* Para alinear los enlaces en fila */
+    justify-content: center; /* Centrar los enlaces */
+    padding: 10px 0; /* Espaciado interno */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra para el navbar */
+}
+
+.navbar .nav-link {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+    font-size: 17px;
+    transition: background-color 0.3s, color 0.3s; /* Transición suave */
+    border-radius: 5px; /* Bordes redondeados para los enlaces */
+    margin: 0 5px; /* Espacio entre los enlaces */
+}
+
+.navbar .nav-link:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.navbar .nav-link.active {
+    background-color: #007bff;
+    color: white;
+    cursor: default; /* No permitir cursor de enlace en el activo */
+}
+
+.navbar .nav-link.active:hover {
+    background-color: #007bff; /* Mantener el color al pasar el ratón si está activo */
+    color: white;
+}
+
+
+h1 {
+    color: #333;
+    margin-bottom: 25px;
+}
+
 .inputs {
-    margin: 20px;
-    padding: 15px;
+    margin: 20px auto; /* Centrar y añadir margen vertical */
+    padding: 25px; /* Más padding para que se vea mejor */
     background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px; /* Bordes más redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+    max-width: 600px; /* Ancho máximo para el contenedor de inputs */
 }
 
 label {
     font-weight: bold;
     display: inline-block;
-    width: 180px;
+    width: 200px; /* Aumentar ancho para alinear mejor los inputs */
     text-align: right;
-    margin-right: 10px;
+    margin-right: 15px; /* Más espacio a la derecha */
+    margin-bottom: 10px; /* Espacio entre labels */
 }
 
 input,
 select {
-    margin: 5px 0;
-    padding: 8px;
+    margin: 8px 0; /* Más margen vertical */
+    padding: 10px; /* Más padding */
     border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 150px;
+    border-radius: 5px; /* Bordes más redondeados */
+    width: 220px; /* Ajustar ancho */
+    box-sizing: border-box; /* Incluir padding y borde en el ancho */
 }
 
 button {
-    margin-top: 15px;
+    margin-top: 20px; /* Más margen superior */
     margin-right: 10px;
-    padding: 10px 20px;
+    padding: 12px 25px; /* Más padding */
     background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px; /* Bordes más redondeados */
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease; /* Transición con ease */
+    font-size: 16px; /* Aumentar tamaño de fuente */
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
-.contenedor-animacion {
-    width: 80%;
-    height: 100px;
-    border: 2px solid black;
-    position: relative;
-    background-color: lightgray;
-    margin: 20px auto;
-    overflow: hidden;
-    border-radius: 8px;
+/* Estilos para la sección de resultados de ecuaciones */
+.resultados-ecuaciones {
+    margin: 30px auto;
+    padding: 25px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    max-width: 700px; /* Ancho un poco mayor para las ecuaciones */
+    text-align: left; /* Alinear texto a la izquierda dentro de esta sección */
 }
 
-#auto {
-    width: 30px;
-    height: 30px;
-    background-color: red;
-    position: absolute;
-    top: 35px;
-    left: 0;
-    border-radius: 50%;
-    transition: left 0.1s linear;
-    z-index: 2;
+.resultados-ecuaciones h2,
+.resultados-ecuaciones h3 {
+    color: #333;
+    text-align: center; /* Centrar títulos dentro de esta sección */
+    margin-bottom: 15px;
 }
 
-canvas {
-    width: 80%;
-    height: 300px;
-    margin: 20px auto;
-    display: block;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.resultados-ecuaciones p {
+    font-size: 1.1em; /* Un poco más grande para las ecuaciones */
+    line-height: 1.6;
+    margin-bottom: 10px;
+    overflow-x: auto; /* Permite desplazamiento horizontal si la ecuación es muy larga */
+    padding: 5px 0;
 }
 
-#valores-dinamicos {
-    background-color: white;
-    border: 1px solid #ccc;
-    width: 50%;
-    margin: 15px auto;
-    padding: 15px;
-    text-align: left;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-}
-
-#valores-dinamicos p {
-    margin: 8px 0;
-    font-size: 16px;
-}
-
-.toggle-buttons {
-    margin: 15px auto;
-}
-
-.toggle-buttons button {
-    margin: 5px;
-    padding: 8px 15px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.toggle-buttons button:hover {
-    background-color: #1e7e34;
-}
-
-.toggle-buttons button.inactive {
-    background-color: #6c757d;
-}
-
-#ecuaciones {
-    width: 80%;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: white;
-    border: 1px solid #ccc;
-    text-align: left;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-}
-
-#ecuaciones h2 {
-    text-align: center;
-    color: #007bff;
-}
-
-#ecuaciones h3 {
-    color: #28a745;
-    margin-top: 20px;
-}
-
-#ecuaciones p {
-    font-size: 16px;
-    line-height: 1.5;
-    font-family: "Courier New", monospace;
+/* Estilos específicos para las ecuaciones renderizadas por MathJax */
+.resultados-ecuaciones p .MathJax {
+    font-size: 1.2em; /* Hace las ecuaciones MathJax un poco más grandes */
+    display: block; /* Asegura que las ecuaciones se muestren en su propia línea */
+    text-align: center; /* Centra las ecuaciones */
+    margin: 15px 0; /* Margen vertical para separar las ecuaciones */
 }
 
 .ayuda {
-    font-size: 12px;
+    font-size: 0.9em;
     color: #666;
-    margin-top: 2px;
+    margin-top: -10px;
+    margin-bottom: 15px;
+    text-align: center; /* Centrar texto de ayuda */
+}
+
+.nota {
+    font-size: 0.85em;
+    color: #888;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    font-style: italic;
+    text-align: center; /* Centrar notas */
+}
+
+
+/* Estilos existentes para el simulador, asegúrate de mantenerlos */
+.contenedor-animacion {
+    position: relative;
+    width: 80%;
+    height: 50px;
+    background-color: #e0e0e0;
+    margin: 20px auto;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+#auto {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-color: #ff6347;
+    border-radius: 50%;
+    top: 5px;
+    left: 0;
+    transition: transform 0.1s linear;
+}
+
+#meta {
+    position: absolute;
+    right: 0;
+    height: 100%;
+    width: 2px;
+    background-color: black;
 }
 
 #controles-tiempo-real {
-    width: 50%;
-    margin: 15px auto;
-    padding: 10px;
-    background-color: #f8f9fa;
-    border: 1px solid #ccc;
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #fff;
     border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #controles-tiempo-real button {
-    margin: 0 10px;
-    padding: 5px 15px;
-    font-size: 14px;
+    margin: 0; /* Quitar margen para evitar doble margen con gap */
+    padding: 8px 18px;
+    font-size: 15px;
+    border-radius: 5px;
 }
 
 #acelerar {
@@ -179,6 +214,7 @@ canvas {
     display: inline-block;
     margin-left: 15px;
     font-weight: bold;
+    color: #333;
 }
 
 .aceleracion-option {
@@ -208,20 +244,70 @@ canvas {
     font-size: 16px;
 }
 
-/* Nuevos estilos para el recuadro de funciones aceptadas */
+canvas {
+    max-width: 100%;
+    height: auto;
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-buttons {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.ecuaciones {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 700px;
+    text-align: left;
+}
+
+.ecuaciones h2 {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 15px;
+}
+
+.ecuaciones p {
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+/* Clases de ayuda y nota para ambos simuladores */
+.ayuda, .nota {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.nota {
+    font-style: italic;
+    color: #888;
+}
+
 .funciones-aceptadas-box {
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-top: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
     border-radius: 5px;
-    text-align: left; /* Alinea el texto a la izquierda dentro del recuadro */
+    padding: 15px;
+    margin-top: 20px;
+    text-align: left;
 }
 
 .funciones-aceptadas-box h4 {
+    color: #007bff;
     margin-top: 0;
-    color: #333;
-    text-align: center; /* Centra el título dentro del recuadro */
+    margin-bottom: 10px;
 }
 
 .funciones-aceptadas-box ul {
@@ -230,12 +316,11 @@ canvas {
     padding-left: 0;
 }
 
-.funciones-aceptadas-box li {
+.funciones-aceptadas-box ul li {
     margin-bottom: 5px;
 }
 
-.funciones-aceptadas-box .nota {
-    font-style: italic;
-    color: #666;
-    margin-top: 10px;
+.funciones-aceptadas-box p.nota {
+    text-align: left;
+    margin-left: 0;
 }

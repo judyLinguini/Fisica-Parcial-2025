@@ -130,8 +130,6 @@ function finalizarSimulacion() {
     calcularYMostrarEstadisticas();
 
     mostrarEcuaciones();
-
-    document.getElementById("controles-integrales").style.display = "block";
 }
 
 function cambiarAceleracionTiempoReal(cambio) {
@@ -685,7 +683,7 @@ function integrateNode(node, variable, context = '') {
 
                 const invertedConstant = new math.OperatorNode('/', 'divide', [new math.ConstantNode(1), constantDivisor]);
                 const multiplicationNode = new math.OperatorNode('*', 'multiply', [functionNumerator, invertedConstant]);
-                
+
                 const result = integrateNode(multiplicationNode, variable, context + '_div_to_mul');
                 return result;
             }
@@ -703,6 +701,23 @@ function integrateNode(node, variable, context = '') {
             return math.parse(`t * log(t) - t`);
         } else if (node.name === 'log10' && node.args.length === 1 && node.args[0].type === 'SymbolNode' && node.args[0].name === variable) {
             return math.parse(`t * log10(t) - t / log(10)`);
+        }
+    }
+    // New addition to handle constant^variable (e.g., 2^t)
+    else if (node.type === 'OperatorNode' && node.op === '^' && node.args.length === 2) {
+        const base = node.args[0];
+        const exponent = node.args[1];
+
+        // Check if base is a constant and exponent is the integration variable
+        if (base.type === 'ConstantNode' && exponent.type === 'SymbolNode' && exponent.name === variable) {
+            const baseValue = base.value;
+            if (baseValue > 0 && baseValue !== 1) { // Integral is defined for positive base not equal to 1
+                // Integral of a^t is a^t / ln(a)
+                return new math.OperatorNode('/', 'divide', [
+                    new math.OperatorNode('^', 'pow', [base, exponent]),
+                    new math.FunctionNode('log', [base]) // math.js log is natural logarithm (ln)
+                ]);
+            }
         }
     }
 
