@@ -35,6 +35,7 @@
             <div id="aceleracion-variable" class="aceleracion-option" style="display:none;">
                 <label for="funcion-aceleracion">Función de aceleración a(t):</label>
                 <input type="text" id="funcion-aceleracion" value="2" placeholder="Ej: t^2 o 2*sin(t)"><br>
+                <p class="ayuda">Usa 't' para el tiempo. Ejemplos: 2^t, 5*sin(t), 3-0.5*t</p>
                 <div class="funciones-aceptadas-box">
                     <h4>Funciones de Aceleración Aceptadas:</h4>
                     <ul>
@@ -133,49 +134,6 @@
         <button onclick="toggleDataset(0)">Velocidad</button>
         <button onclick="toggleDataset(1)">Posición</button>
         <button onclick="toggleDataset(2)">Aceleración</button>
-    </div>
-
-    <div id="controles-integrales" style="display: none;">
-        <h3>Cálculo de Integrales y Derivadas</h3>
-        <div class="integrales-inputs">
-            <label for="tipo-funcion-integral">Función a integrar:</label>
-            <select id="tipo-funcion-integral">
-                <option value="velocidad">Velocidad (v)</option>
-                <option value="posicion">Posición (x)</option>
-                <option value="aceleracion">Aceleración (a)</option>
-            </select>
-
-            <div class="integrales-botones">
-                <button onclick="calcularIntegrales()" class="btn-integral">Calcular Integral (Numérico)</button>
-                <button onclick="calcularIntegralAnaliticamente()" class="btn-integral">Calcular Integral
-                    (Analítico)</button>
-            </div>
-        </div>
-
-        <div class="derivadas-inputs">
-            <label for="tipo-funcion-derivada">Función a derivar:</label>
-            <select id="tipo-funcion-derivada">
-                <option value="posicion">Posición (x)</option>
-                <option value="velocidad">Velocidad (v)</option>
-                <option value="aceleracion">Aceleración (a)</option>
-            </select>
-
-            <div class="derivadas-botones">
-                <button onclick="calcularDerivadas()" class="btn-derivada">Calcular Derivada (Numérico)</button>
-                <button onclick="calcularDerivadaAnaliticamente()" class="btn-derivada">Calcular Derivada
-                    (Analítico)</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="seccion-integrales" style="display: none;">
-        <div id="resultados-integrales">
-        </div>
-    </div>
-
-    <div id="seccion-derivadas" style="display: none;">
-        <div id="resultados-derivadas">
-        </div>
     </div>
 
     <div id="ecuaciones" class="ecuaciones">

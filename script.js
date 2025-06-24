@@ -853,7 +853,7 @@ function mostrarEcuaciones() {
 
         ecuacionesTexto = `
             <h3>Movimiento con Aceleración Variable:</h3>
-            <p><strong>Función de aceleración ingresada:</strong> $a(t) = ${funcionAceleracion}$</p>
+            <p><strong>Función de aceleración ingresada:</strong> a(t) = ${funcionAceleracion}</p>
         `;
 
         if (success) {
@@ -862,20 +862,20 @@ function mostrarEcuaciones() {
             const displayPositionExpression = positionExpression.replace(/v_0/g, 'v₀').replace(/x_0/g, 'x₀');
 
             ecuacionesTexto += `
-                <p><strong>Ecuación de velocidad:</strong> $v(t) = ${displayVelocityExpression}$</p>
-                <p><strong>Para t = ${tiempoFinal.toFixed(2)} s:</strong> $v(${tiempoFinal.toFixed(2)}) = ${velocidadFinal.toFixed(2)}$ m/s</p>
-                <p><strong>Ecuación de posición:</strong> $x(t) = ${displayPositionExpression}$</p>
-                <p><strong>Para t = ${tiempoFinal.toFixed(2)} s:</strong> $x(${tiempoFinal.toFixed(2)}) = ${posicionActual.toFixed(2)}$ m</p>
+                <p><strong>Ecuación de velocidad:</strong> v(t) = ${displayVelocityExpression}</p>
+                <p><strong>Para t = ${tiempoFinal.toFixed(2)} s:</strong> v(${tiempoFinal.toFixed(2)}) = ${velocidadFinal.toFixed(2)} m/s</p>
+                <p><strong>Ecuación de posición:</strong> x(t) = ${displayPositionExpression}</p>
+                <p><strong>Para t = ${tiempoFinal.toFixed(2)} s:</strong> x(${tiempoFinal.toFixed(2)}) = ${posicionActual.toFixed(2)} m</p>
                 <p><em>Estas ecuaciones se han derivado analíticamente.</em></p>
             `;
         } else {
             ecuacionesTexto += `
-                <p><strong>Ecuación de velocidad:</strong> $v(t) = v₀ + \\int a(t)dt$</p>
-                <p><strong>Velocidad inicial:</strong> $v₀ = ${velocidadInicial}$ m/s</p>
-                <p><strong>Velocidad final calculada (numéricamente):</strong> $v = ${velocidadFinal.toFixed(2)}$ m/s</p>
+                <p><strong>Ecuación de velocidad:</strong> v(t) = v₀ + \\int a(t)dt</p>
+                <p><strong>Velocidad inicial:</strong> v₀ = ${velocidadInicial} m/s</p>
+                <p><strong>Velocidad final calculada (numéricamente):</strong> v = ${velocidadFinal.toFixed(2)} m/s</p>
 
-                <p><strong>Ecuación de posición:</strong> $x(t) = x₀ + \\int v(t)dt$</p>
-                <p><strong>Posición final calculada (numéricamente):</strong> $x = ${posicionActual.toFixed(2)}$ m</p>
+                <p><strong>Ecuación de posición:</strong> x(t) = x₀ + \\int v(t)dt</p>
+                <p><strong>Posición final calculada (numéricamente):</strong> x = ${posicionActual.toFixed(2)} m</p>
                 <p><em>Para funciones de aceleración variables complejas (o cuando no se puede integrar con \`math.js\`), las ecuaciones analíticas de velocidad y posición exactas requieren un software de álgebra simbólica avanzado. La simulación calcula estos valores numéricamente.</em></p>
             `;
         }
@@ -885,9 +885,9 @@ function mostrarEcuaciones() {
     ecuacionesTexto += `
         <h3>Método de cálculo numérico utilizado en la simulación:</h3>
         <p>Para el cálculo de la posición y velocidad con aceleración variable (o constante en la simulación paso a paso), se utilizó el método de integración numérica por aproximación de Euler:</p>
-        <p>$\\text{Para cada paso de tiempo } \\Delta t = 0.1s:$</p>
-        <p>$v(t + \\Delta t) = v(t) + a(t) \\cdot \\Delta t$</p>
-        <p>$x(t + \\Delta t) = x(t) + v(t) \\cdot \\Delta t$</p>
+        <p>\\text{Para cada paso de tiempo } \\Delta t = 0.1s:</p>
+        <p>v(t + \\Delta t) = v(t) + a(t) \\cdot \\Delta t</p>
+        <p>x(t + \\Delta t) = x(t) + v(t) \\cdot \\Delta t</p>
 
         <h3>Resumen de la simulación:</h3>
         <p><strong>Tiempo total:</strong> ${tiempoFinal.toFixed(2)} s</p>
@@ -912,9 +912,9 @@ function reiniciarSimulacion() {
     enSimulacion = false;
     document.getElementById("btn-iniciar").disabled = false;
     document.getElementById("controles-tiempo-real").style.display = "none";
-    document.getElementById("controles-integrales").style.display = "none";
-    document.getElementById("seccion-integrales").style.display = "none";
-    document.getElementById("seccion-derivadas").style.display = "none";
+    //document.getElementById("controles-integrales").style.display = "none";
+    //document.getElementById("seccion-integrales").style.display = "none";
+    //document.getElementById("seccion-derivadas").style.display = "none";
 
     // Reiniciar valores
     document.getElementById("auto").style.left = "0px";
