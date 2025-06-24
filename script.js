@@ -6,10 +6,9 @@ let enSimulacion = false;
 let tiempoActual = 0;
 let velocidadActual = 0;
 let posicionActual = 0;
-let valorAceleracionVariable = 0; // Esta variable parece no usarse, se puede revisar
+let valorAceleracionVariable = 0; // Esta variable parece no usarse, pero si la borro falla. WTF?
 let distanciaTotal = 0;
 
-// Datos para el gráfico
 let datosTiempo = [];
 let datosVelocidad = [];
 let datosPosicion = [];
@@ -37,9 +36,7 @@ function calcularAceleracion(tiempo) {
             const scope = { t: tiempo };
             return math.evaluate(expresion, scope);
         } catch (error) {
-            // console.error("Error en la función de aceleración:", error);
-            // alert("Error en la función de aceleración. Usando valor predeterminado de 2 m/s².");
-            return 2; // Valor predeterminado si la función es inválida
+            return 2; 
         }
     }
 }
@@ -50,64 +47,51 @@ function iniciarSimulacion() {
     reiniciarSimulacion();
     enSimulacion = true;
 
-    // Habilitar controles en tiempo real
     document.getElementById("controles-tiempo-real").style.display = "block";
     document.getElementById("btn-iniciar").disabled = true;
 
-    // Obtener los valores de entrada
     distanciaTotal = parseFloat(document.getElementById("distancia").value);
     const velocidadInicial = parseFloat(document.getElementById("velocidad").value);
 
     const auto = document.getElementById("auto");
     const anchoPista = document.querySelector(".contenedor-animacion").offsetWidth - auto.offsetWidth;
 
-    // Establecer valores iniciales
     tiempoActual = 0;
     posicionActual = 0;
     velocidadActual = velocidadInicial;
     aceleracionActual = calcularAceleracion(0);
 
-    // Variables para gráficas
     datosTiempo = [];
     datosVelocidad = [];
     datosPosicion = [];
     datosAceleracion = [];
 
-    // Inicializar variables estadísticas
     velocidadMaxima = velocidadInicial;
     aceleracionMaxima = 0;
     sumaVelocidades = 0;
     sumaAceleraciones = 0;
     contadorMuestras = 0;
 
-    // Ocultar estadísticas hasta que termine la simulación
     document.getElementById("estadisticas").style.display = "none";
 
-    // Mostrar tipo de movimiento inicial
     actualizarTipoMovimiento();
 
-    // Iniciar el intervalo de simulación
     intervalo = setInterval(() => {
         if (posicionActual >= distanciaTotal) {
             finalizarSimulacion();
             return;
         }
 
-        // Calcular aceleración para el tiempo actual
         aceleracionActual = calcularAceleracion(tiempoActual);
 
-        // Actualizar posición y velocidad usando ecuaciones de movimiento
         const deltaT = 0.1; // incremento de tiempo en segundos
 
-        // Ecuaciones de movimiento con aceleración variable (método de Euler)
         velocidadActual += aceleracionActual * deltaT;
         posicionActual += velocidadActual * deltaT;
 
-        // Actualizar posición del auto en la animación
         const porcentajePosicion = (posicionActual / distanciaTotal) * anchoPista;
         auto.style.left = `${Math.min(porcentajePosicion, anchoPista)}px`;
 
-        // Actualizar estadísticas
         sumaVelocidades += velocidadActual;
         sumaAceleraciones += aceleracionActual;
         contadorMuestras++;
@@ -115,25 +99,20 @@ function iniciarSimulacion() {
         velocidadMaxima = Math.max(velocidadMaxima, velocidadActual);
         aceleracionMaxima = Math.max(Math.abs(aceleracionMaxima), Math.abs(aceleracionActual)); // Usar Math.abs para aceleracionMaxima
 
-        // Actualizar valores dinámicos
         document.getElementById("tiempo").innerText = tiempoActual.toFixed(1);
         document.getElementById("posicion").innerText = posicionActual.toFixed(2);
         document.getElementById("velocidadActual").innerText = velocidadActual.toFixed(2);
         document.getElementById("aceleracionActual").innerText = aceleracionActual.toFixed(2);
 
-        // Actualizar tipo de movimiento
         actualizarTipoMovimiento();
 
-        // Guardar datos para gráficas
         datosTiempo.push(tiempoActual);
         datosVelocidad.push(velocidadActual);
         datosPosicion.push(posicionActual);
         datosAceleracion.push(aceleracionActual);
 
-        // Actualizar gráfica en tiempo real
         actualizarGrafica();
 
-        // Incrementar tiempo
         tiempoActual += deltaT;
     }, 100);
 }
@@ -143,20 +122,15 @@ function finalizarSimulacion() {
     enSimulacion = false;
     document.getElementById("btn-iniciar").disabled = false;
 
-    // Ocultar valores dinámicos y controles en tiempo real
     document.getElementById("valores-dinamicos").style.display = "none";
     document.getElementById("controles-tiempo-real").style.display = "none";
 
-    // Generar gráfica final
     generarGraficaFinal();
 
-    // Calcular y mostrar estadísticas
     calcularYMostrarEstadisticas();
 
-    // Mostrar ecuaciones utilizadas
     mostrarEcuaciones();
 
-    // Mostrar botón de cálculo de integrales
     document.getElementById("controles-integrales").style.display = "block";
 }
 
@@ -168,12 +142,10 @@ function cambiarAceleracionTiempoReal(cambio) {
         document.getElementById("aceleracion").value = aceleracionActual;
         document.getElementById("aceleracion-actual").innerText = `Aceleración: ${aceleracionActual.toFixed(1)} m/s²`;
     } else {
-        // Para aceleración variable, modificamos el factor multiplicador
         try {
             let expresion = document.getElementById("funcion-aceleracion").value;
             let factorActual = 1;
 
-            // Intenta extraer un factor multiplicador si existe
             const regex = /^(\d+(\.\d+)?)\*(.+)/;
             const match = expresion.match(regex);
 
@@ -182,37 +154,28 @@ function cambiarAceleracionTiempoReal(cambio) {
                 const nuevaExpresion = (factorActual + cambio) + "*" + match[3];
                 document.getElementById("funcion-aceleracion").value = nuevaExpresion;
             } else {
-                // Si no hay factor explícito, agregamos uno
                 document.getElementById("funcion-aceleracion").value = (1 + cambio) + "*(" + expresion + ")";
             }
 
-            // Actualizar etiqueta
             document.getElementById("aceleracion-actual").innerText = `Aceleración modificada`;
         } catch (error) {
             console.error("Error al modificar la aceleración variable:", error);
         }
     }
 
-    // Actualizar el tipo de movimiento después de cambiar la aceleración
     actualizarTipoMovimiento();
 }
 
 function actualizarTipoMovimiento() {
     let tipoMovimiento = "";
 
-    // Si la aceleración es muy cercana a cero, se considera MRU
-    if (Math.abs(aceleracionActual) < 0.01 && tipoAceleracionSeleccionada === "constante") {
+    if (Math.abs(aceleracionActual) < 0.01 && tipoAceleracionSeleccionada === "constante") 
         tipoMovimiento = "Movimiento Rectilíneo Uniforme (MRU)";
-    }
-    // Si la aceleración es constante y no cero, se considera MRUA
-    else if (tipoAceleracionSeleccionada === "constante" && Math.abs(aceleracionActual) >= 0.01) {
+    else if (tipoAceleracionSeleccionada === "constante" && Math.abs(aceleracionActual) >= 0.01) 
         tipoMovimiento = "Movimiento Rectilíneo Uniformemente Acelerado (MRUA)";
-    }
-    // Si es variable, se considera Movimiento con Aceleración Variable
-    else if (tipoAceleracionSeleccionada === "variable") {
+    else if (tipoAceleracionSeleccionada === "variable") 
         tipoMovimiento = "Movimiento con Aceleración Variable";
-    }
-
+    
     document.getElementById("tipoMovimiento").innerText = tipoMovimiento;
 }
 
@@ -320,13 +283,11 @@ function toggleDataset(index) {
     dataset.hidden = !dataset.hidden;
     chart.update();
 
-    // Actualizar estilo del botón
     const botones = document.querySelectorAll('.toggle-buttons button');
-    if (dataset.hidden) {
+    if (dataset.hidden) 
         botones[index].classList.add('inactive');
-    } else {
+    else
         botones[index].classList.remove('inactive');
-    }
 }
 
 function calcularIntegrales() {
@@ -364,7 +325,6 @@ function calcularIntegrales() {
             break;
     }
 
-    // Mostrar resultados
     resultados.innerHTML = `
         <h4>Resultado del Cálculo de Integral</h4>
         <div class="resultado-integral">
@@ -384,14 +344,12 @@ function calcularIntegrales() {
         </div>
     `;
 
-    // Mostrar la sección de resultados
     document.getElementById("seccion-integrales").style.display = "block";
 }
 
 function calcularIntegralTrapecio(tiempos, valores) {
-    if (tiempos.length !== valores.length || tiempos.length < 2) {
+    if (tiempos.length !== valores.length || tiempos.length < 2)
         return 0;
-    }
 
     let integral = 0;
 
@@ -408,11 +366,10 @@ function calcularIntegralAnaliticamente() {
     const tipoFuncion = document.getElementById("tipo-funcion-integral").value;
     const resultados = document.getElementById("resultados-integrales");
 
-    if (tipoAceleracionSeleccionada === "constante") {
+    if (tipoAceleracionSeleccionada === "constante")
         calcularIntegralAnaliticaConstante(tipoFuncion, resultados);
-    } else {
+    else 
         calcularIntegralAnaliticaVariable(tipoFuncion, resultados);
-    }
 }
 
 function calcularIntegralAnaliticaConstante(tipoFuncion, elementoResultados) {
@@ -427,24 +384,18 @@ function calcularIntegralAnaliticaConstante(tipoFuncion, elementoResultados) {
 
     switch (tipoFuncion) {
         case "velocidad":
-            // v(t) = v₀ + at
-            // ∫v(t)dt = v₀t + (1/2)at²
             integral = velocidadInicial * tiempoFinal + 0.5 * aceleracion * Math.pow(tiempoFinal, 2);
             formula = `Integral(v(t)dt) = ${velocidadInicial}t + 0.5 * ${aceleracion} * t²`;
             unidades = "m";
             descripcion = "Desplazamiento total";
             break;
         case "aceleracion":
-            // a(t) = a (constante)
-            // ∫a dt = at
             integral = aceleracion * tiempoFinal;
             formula = `Integral(a(t)dt) = ${aceleracion} * t`;
             unidades = "m/s";
             descripcion = "Cambio total de velocidad";
             break;
         case "posicion":
-            // x(t) = x₀ + v₀t + (1/2)at²
-            // ∫x(t)dt = x₀t + (1/2)v₀t² + (1/6)at³
             integral = 0.5 * velocidadInicial * Math.pow(tiempoFinal, 2) + (1/6) * aceleracion * Math.pow(tiempoFinal, 3);
             formula = `Integral(x(t)dt) = 0.5 * ${velocidadInicial} * t² + (1/6) * ${aceleracion} * t³`;
             unidades = "m·s";
@@ -509,7 +460,6 @@ function calcularIntegralAnaliticaVariable(tipoFuncion, elementoResultados) {
                 descripcion = "No se pudo evaluar analíticamente";
             }
         } else if (tipoFuncion === "aceleracion") {
-            // Para aceleración, no se integra, solo se evalúa la función de aceleración original
             try {
                 const scope = { t: tiempoFinal };
                 valorEvaluado = math.evaluate(funcionAceleracion, scope).toFixed(4);
@@ -530,7 +480,7 @@ function calcularIntegralAnaliticaVariable(tipoFuncion, elementoResultados) {
             <div class="resultado-integral">
                 <p><strong>Función integrada:</strong> ${tipoFuncion.charAt(0).toUpperCase() + tipoFuncion.slice(1)}</p>
                 <p><strong>Método:</strong> Integración Analítica</p>
-                <p><strong>Expresión analítica:</strong> $${expresionAnalitica}$</p>
+                <p><strong>Expresión analítica:</strong> ${expresionAnalitica}</p>
                 <p><strong>Evaluada en t = ${tiempoFinal.toFixed(2)} s:</strong> ${valorEvaluado} ${unidades}</p>
                 <p><strong>Interpretación física:</strong> ${descripcion}</p>
             </div>
@@ -541,7 +491,7 @@ function calcularIntegralAnaliticaVariable(tipoFuncion, elementoResultados) {
             <div class="resultado-integral">
                 <p><strong>Función integrada:</strong> ${tipoFuncion.charAt(0).toUpperCase() + tipoFuncion.slice(1)}</p>
                 <p><strong>Método:</strong> Integración Analítica (Aceleración Variable)</p>
-                <p><strong>Función de aceleración:</strong> $a(t) = ${funcionAceleracion}$</p>
+                <p><strong>Función de aceleración:</strong> a(t) = ${funcionAceleracion}</p>
                 <p><strong>Nota:</strong> La integración analítica para esta función no fue posible con el sistema de álgebra simbólica simple de math.js.</p>
                 <p><strong>Sugerencia:</strong> Use el método numérico (Regla del Trapecio) para obtener un resultado aproximado para la función específica ingresada.</p>
             </div>
@@ -565,7 +515,7 @@ function isConstant(node, variable) {
     if (node.type === 'ConstantNode') {
         return true;
     }
-    if (node.args) { // OperatorNodes and FunctionNodes have 'args' property
+    if (node.args) {
         return node.args.every(arg => isConstant(arg, variable));
     }
     return false;
@@ -599,26 +549,21 @@ function getSymbolicIntegratedFunctions(accelerationExpression, initialVelocity,
 
         if (integratedAcelerationNode) {
             let simplifiedIntegratedAceleration = math.simplify(integratedAcelerationNode).toString();
-            // Si la expresión es vacía después de simplificar (ej. integral de 0), ajustarla a "0"
             if (simplifiedIntegratedAceleration.trim() === '') {
                 simplifiedIntegratedAceleration = '0';
             }
             console.log("  Simplified integrated acceleration:", simplifiedIntegratedAceleration);
 
-
-            // Construir la función de velocidad con v0 usando toString()
             const velocityExpressionRaw = `${initialVelocity} + (${simplifiedIntegratedAceleration})`;
             let velocityExprNode = math.parse(velocityExpressionRaw);
             velocityExprNode = math.simplify(velocityExprNode); // Simplificar la expresión de velocidad también
             let formattedVelocityExpression = velocityExprNode.toString();
-            // Reemplazar 'unaryminus' para una mejor visualización
+
             formattedVelocityExpression = formattedVelocityExpression.replace(/unaryminus/g, '-');
             velocityExpression = formattedVelocityExpression; // Usar la versión formateada
             successVelocity = true;
             console.log("  Final velocity expression:", velocityExpression);
 
-
-            // Intentar integrar la función de velocidad para obtener la posición
             console.log("  Starting integration for velocity expression:", velocityExprNode.toString());
             const integratedVelocityNode = integrateNode(velocityExprNode, 't', 'vel_integration'); // Añadir tag de origen
             console.log("  Integrated velocity node:", integratedVelocityNode ? integratedVelocityNode.toString() : 'NULL');
@@ -630,13 +575,11 @@ function getSymbolicIntegratedFunctions(accelerationExpression, initialVelocity,
                 }
                 console.log("  Simplified integrated velocity:", simplifiedIntegratedVelocity);
 
-
-                // Construir la función de posición con x0 usando toString()
                 const positionExpressionRaw = `${initialPosition} + (${simplifiedIntegratedVelocity})`;
                 let positionExprNode = math.parse(positionExpressionRaw);
                 positionExprNode = math.simplify(positionExprNode); // Simplificar la expresión de posición también
                 let formattedPositionExpression = positionExprNode.toString();
-                // Reemplazar 'unaryminus' para una mejor visualización
+
                 formattedPositionExpression = formattedPositionExpression.replace(/unaryminus/g, '-');
                 positionExpression = formattedPositionExpression; // Usar la versión formateada
                 successPosition = true;
@@ -657,7 +600,6 @@ function getSymbolicIntegratedFunctions(accelerationExpression, initialVelocity,
     console.log("Symbolic integration final success:", successVelocity && successPosition);
     console.log("--------------------------------------------------");
     return {
-        // Los strings son solo la RHS de la expresión
         velocityExpression: successVelocity ? velocityExpression : `v₀ + \\int a(t)dt`,
         positionExpression: successPosition ? positionExpression : `x₀ + \\int v(t)dt`,
         success: successVelocity && successPosition // Solo éxito si ambas integraciones fueron analíticas
@@ -673,16 +615,12 @@ function getSymbolicIntegratedFunctions(accelerationExpression, initialVelocity,
  * @returns {math.MathNode | null} El nodo de la integral o null si no se puede integrar.
  */
 function integrateNode(node, variable, context = '') {
-    // console.log(`[integrateNode] (${context}) Integrating: ${node.toString()} (Type: ${node.type})`); // Mantener para depuración profunda
-
     if (node.type === 'ConstantNode') {
-        // console.log(`[integrateNode] (${context}) Constant integral result for ${node.toString()}: ${node.value} * ${variable}`);
         if (node.value === 0) {
             return new math.ConstantNode(0);
         }
         return new math.OperatorNode('*', 'multiply', [new math.ConstantNode(node.value), new math.SymbolNode(variable)]);
     } else if (node.type === 'SymbolNode' && node.name === variable) {
-        // console.log(`[integrateNode] (${context}) Symbol '${variable}' integral result for ${node.toString()}: 1 / 2 * ${variable} ^ 2`);
         return new math.OperatorNode('*', 'multiply', [
             new math.OperatorNode('/', 'divide', [new math.ConstantNode(1), new math.ConstantNode(2)]),
             new math.OperatorNode('^', 'pow', [new math.SymbolNode(variable), new math.ConstantNode(2)])
@@ -691,119 +629,83 @@ function integrateNode(node, variable, context = '') {
         const power = node.args[1].value;
         const newPower = power + 1;
         const coefficient = new math.Fraction(1, newPower);
-        // console.log(`[integrateNode] (${context}) Power integral result for ${node.toString()}: (${coefficient.toFraction()}) * ${variable} ^ ${newPower}`);
         return new math.OperatorNode('*', 'multiply', [
             new math.ConstantNode(coefficient.valueOf()),
             new math.OperatorNode('^', 'pow', [new math.SymbolNode(variable), new math.ConstantNode(newPower)])
         ]);
     } else if (node.type === 'OperatorNode') {
-        // console.log(`[integrateNode] (${context}) OperatorNode: op=${node.op}, args.length=${node.args.length}`); // Mantener para depuración
         if (node.op === '*' && node.args.length === 2) {
-            // console.log(`[integrateNode] (${context}) Found multiplication node. Args: ${node.args[0].toString()}, ${node.args[1].toString()}`); // Mantener para depuración
-            // console.log(`[integrateNode] (${context}) Checking isConstant for arg0 (${node.args[0].toString()}): ${isConstant(node.args[0], variable)}`); // Mantener para depuración
-            // console.log(`[integrateNode] (${context}) Checking isConstant for arg1 (${node.args[1].toString()}): ${isConstant(node.args[1], variable)}`); // Mantener para depuración
-
             let constantPart = null;
             let functionPart = null;
 
-            // Identificar la constante y la función usando la nueva función isConstant
             if (isConstant(node.args[0], variable)) {
                 constantPart = node.args[0];
                 functionPart = node.args[1];
-                // console.log(`[integrateNode] (${context}) Identified Constant= ${constantPart.toString()}, Function=${functionPart.toString()} (Arg 0 is constant)`); // Mantener para depuración
             } else if (isConstant(node.args[1], variable)) {
                 constantPart = node.args[1];
                 functionPart = node.args[0];
-                // console.log(`[integrateNode] (${context}) Identified Constant=${constantPart.toString()}, Function=${functionPart.toString()} (Arg 1 is constant)`); // Mantener para depuración
             }
 
             if (constantPart && functionPart) {
                 const integratedFunctionPart = integrateNode(functionPart, variable, context + '_mul_func');
-                // console.log(`[integrateNode] (${context}) Result of integrating function part (${functionPart.toString()}): ${integratedFunctionPart ? integratedFunctionPart.toString() : 'NULL'}`); // Mantener para depuración
                 if (integratedFunctionPart) {
-                    // Return C * integral(f(t))
                     const result = new math.OperatorNode('*', 'multiply', [constantPart, integratedFunctionPart]);
-                    // console.log(`[integrateNode] (${context}) Product integral result for ${node.toString()}: ${result.toString()}`); // Mantener para depuración
                     return result;
                 }
             }
-            // console.log(`[integrateNode] (${context}) Failed to identify constant-function product or integrate function part for ${node.toString()}. Returning NULL.`); // Mantener para depuración
             return null; // Fallback si no se encontró constante-función o la función no se pudo integrar
         } else if (node.op === '+' || node.op === '-') {
-            // console.log(`[integrateNode] (${context}) Found sum/difference node. Args: ${node.args.map(arg => arg.toString()).join(',')}`); // Mantener para depuración
             const integratedArgs = node.args.map(arg => integrateNode(arg, variable, context + '_sum_arg'));
             if (integratedArgs.every(arg => arg !== null)) {
                 let newNode = integratedArgs[0];
                 for (let i = 1; i < integratedArgs.length; i++) {
                     newNode = new math.OperatorNode(node.op, node.op === '+' ? 'add' : 'subtract', [newNode, integratedArgs[i]]);
                 }
-                // console.log(`[integrateNode] (${context}) Sum/Difference integral result for ${node.toString()}: ${newNode.toString()}`); // Mantener para depuración
                 return newNode;
             } else {
-                // console.log(`[integrateNode] (${context}) One or more arguments failed to integrate for sum/difference ${node.toString()}. Returning NULL.`); // Mantener para depuración
                 return null;
             }
         } else if (node.op === 'unaryminus') {
-            // console.log(`[integrateNode] (${context}) Found unaryminus node. Arg: ${node.args[0].toString()}`); // Mantener para depuración
             const integratedArg = integrateNode(node.args[0], variable, context + '_uminus_arg');
             if (integratedArg) {
                 const result = new math.OperatorNode('unaryminus', 'unaryminus', [integratedArg]);
-                // console.log(`[integrateNode] (${context}) Unaryminus integral result for ${node.toString()}: ${result.toString()}`); // Mantener para depuración
                 return result;
             } else {
-                // console.log(`[integrateNode] (${context}) Argument of unaryminus failed to integrate for ${node.toString()}. Returning NULL.`); // Mantener para depuración
                 return null;
             }
         }
-        // Agregamos manejo para la división si es el caso de C/f(t) o f(t)/C
         else if (node.op === '/' && node.args.length === 2) {
-            // console.log(`[integrateNode] (${context}) Found division node. Args: ${node.args[0].toString()}, ${node.args[1].toString()}`); // Mantener para depuración
-            // console.log(`[integrateNode] (${context}) Checking isConstant for arg0 (${node.args[0].toString()}): ${isConstant(node.args[0], variable)}`); // Mantener para depuración
-            // console.log(`[integrateNode] (${context}) Checking isConstant for arg1 (${node.args[1].toString()}): ${isConstant(node.args[1], variable)}`); // Mantener para depuración
 
-            // Caso de C / f(t) -> no se puede integrar con las reglas actuales, pero podemos intentar C * (1/f(t))
             if (isConstant(node.args[0], variable)) {
-                // console.log(`[integrateNode] (${context}) Constant divided by function. Not directly supported for general f(t).`); // Mantener para depuración
-                return null; // Por ahora, no lo soportamos
+                return null; // Por ahora, ya no aguanto
             }
-            // Caso de f(t) / C
             else if (isConstant(node.args[1], variable)) {
-                // console.log(`[integrateNode] (${context}) Function divided by constant. Converting to multiplication.`); // Mantener para depuración
                 const constantDivisor = node.args[1];
                 const functionNumerator = node.args[0];
 
                 const invertedConstant = new math.OperatorNode('/', 'divide', [new math.ConstantNode(1), constantDivisor]);
                 const multiplicationNode = new math.OperatorNode('*', 'multiply', [functionNumerator, invertedConstant]);
                 
-                // Recursively call integrateNode for the new multiplication node
                 const result = integrateNode(multiplicationNode, variable, context + '_div_to_mul');
-                // console.log(`[integrateNode] (${context}) Division (f(t)/C) integral result for ${node.toString()}: ${result ? result.toString() : 'NULL'}`); // Mantener para depuración
                 return result;
             }
-            // console.log(`[integrateNode] (${context}) Division node not supported or pattern not matched for ${node.toString()}. Returning NULL.`); // Mantener para depuración
             return null;
         }
 
     } else if (node.type === 'FunctionNode') {
         if (node.name === 'sin' && node.args.length === 1 && node.args[0].type === 'SymbolNode' && node.args[0].name === variable) {
-            // console.log(`[integrateNode] (${context}) Sin integral result for ${node.toString()}: -cos(${variable})`); // Mantener para depuración
             return new math.OperatorNode('unaryminus', 'unaryminus', [new math.FunctionNode('cos', [new math.SymbolNode(variable)])]);
         } else if (node.name === 'cos' && node.args.length === 1 && node.args[0].type === 'SymbolNode' && node.args[0].name === variable) {
-            // console.log(`[integrateNode] (${context}) Cos integral result for ${node.toString()}: sin(${variable})`); // Mantener para depuración
             return new math.FunctionNode('sin', [new math.SymbolNode(variable)]);
         } else if (node.name === 'exp' && node.args.length === 1 && node.args[0].type === 'SymbolNode' && node.args[0].name === variable) {
-            // console.log(`[integrateNode] (${context}) Exp integral result for ${node.toString()}: exp(${variable})`); // Mantener para depuración
             return new math.FunctionNode('exp', [new math.SymbolNode(variable)]);
         } else if (node.name === 'log' && node.args.length === 1 && node.args[0].type === 'SymbolNode' && node.args[0].name === variable) {
-            // console.log(`[integrateNode] (${context}) Log integral result for ${node.toString()}: t * log(t) - t`); // Mantener para depuración
             return math.parse(`t * log(t) - t`);
         } else if (node.name === 'log10' && node.args.length === 1 && node.args[0].type === 'SymbolNode' && node.args[0].name === variable) {
-            // console.log(`[integrateNode] (${context}) Log10 integral result for ${node.toString()}: t * log10(t) - t / log(10)`); // Mantener para depuración
             return math.parse(`t * log10(t) - t / log(10)`);
         }
     }
 
-    // console.log(`[integrateNode] (${context}) Failed to integrate: ${node.toString()} (Type: ${node.type}). Returning NULL.`); // Mantener para depuración
     return null; // No se pudo integrar
 }
 
@@ -819,7 +721,6 @@ function mostrarEcuaciones() {
         const aceleracion = parseFloat(document.getElementById("aceleracion").value);
 
         if (Math.abs(aceleracion) < 0.01) {
-            // Ecuaciones MRU (sin $)
             ecuacionesTexto = `
                 <h3>Movimiento Rectilíneo Uniforme (MRU):</h3>
                 <p><strong>Ecuación de posición:</strong> x(t) = x₀ + v₀t</p>
@@ -832,7 +733,6 @@ function mostrarEcuaciones() {
                 <p><strong>Ecuación de aceleración:</strong> a(t) = 0 m/s² (sin aceleración)</p>
             `;
         } else {
-            // Ecuaciones MRUA (sin $)
             ecuacionesTexto = `
                 <h3>Movimiento Rectilíneo Uniformemente Acelerado (MRUA):</h3>
                 <p><strong>Ecuación de posición:</strong> x(t) = x₀ + v₀t + 0.5 * a * t²</p>
@@ -847,7 +747,6 @@ function mostrarEcuaciones() {
             `;
         }
     } else {
-        // Ecuaciones para aceleración variable (con $)
         const funcionAceleracion = document.getElementById("funcion-aceleracion").value;
         const { velocityExpression, positionExpression, success } = getSymbolicIntegratedFunctions(funcionAceleracion, velocidadInicial, posicionInicial);
 
@@ -857,7 +756,6 @@ function mostrarEcuaciones() {
         `;
 
         if (success) {
-            // Aplicar reemplazos de subíndices y envolver en $ para MathJax
             const displayVelocityExpression = velocityExpression.replace(/v_0/g, 'v₀').replace(/x_0/g, 'x₀');
             const displayPositionExpression = positionExpression.replace(/v_0/g, 'v₀').replace(/x_0/g, 'x₀');
 
@@ -881,7 +779,6 @@ function mostrarEcuaciones() {
         }
     }
 
-    // Añadir información sobre cálculos numéricos realizados
     ecuacionesTexto += `
         <h3>Método de cálculo numérico utilizado en la simulación:</h3>
         <p>Para el cálculo de la posición y velocidad con aceleración variable (o constante en la simulación paso a paso), se utilizó el método de integración numérica por aproximación de Euler:</p>
@@ -898,11 +795,8 @@ function mostrarEcuaciones() {
 
     document.getElementById("ecuaciones-texto").innerHTML = ecuacionesTexto;
 
-    // Renderizar las ecuaciones LaTeX con MathJax
-    // Solo se llama si hay MathJax en el contenido
     if (window.MathJax) {
         window.MathJax.typesetPromise().then(() => {
-            // Optional: Do something after typesetting if needed
         }).catch((err) => console.error('MathJax typesetting failed:', err));
     }
 }
@@ -912,11 +806,7 @@ function reiniciarSimulacion() {
     enSimulacion = false;
     document.getElementById("btn-iniciar").disabled = false;
     document.getElementById("controles-tiempo-real").style.display = "none";
-    //document.getElementById("controles-integrales").style.display = "none";
-    //document.getElementById("seccion-integrales").style.display = "none";
-    //document.getElementById("seccion-derivadas").style.display = "none";
 
-    // Reiniciar valores
     document.getElementById("auto").style.left = "0px";
     document.getElementById("tiempo").innerText = "0.0";
     document.getElementById("posicion").innerText = "0.0";
@@ -924,18 +814,14 @@ function reiniciarSimulacion() {
     document.getElementById("aceleracionActual").innerText = "0.0";
     document.getElementById("tipoMovimiento").innerText = "-";
 
-    // Reiniciar aceleración actual
     aceleracionActual = parseFloat(document.getElementById("aceleracion").value);
     document.getElementById("aceleracion-actual").innerText = `Aceleración: ${aceleracionActual.toFixed(1)} m/s²`;
 
-    // Limpiar gráfica
     if (chart) chart.destroy();
     chart = null;
 
-    // Limpiar ecuaciones
     document.getElementById("ecuaciones-texto").innerHTML = "";
 
-    // Reiniciar variables
     tiempoActual = 0;
     velocidadActual = 0;
     posicionActual = 0;
@@ -944,13 +830,10 @@ function reiniciarSimulacion() {
     datosPosicion = [];
     datosAceleracion = [];
 
-    // Mostrar valores dinámicos nuevamente
     document.getElementById("valores-dinamicos").style.display = "block";
 
-    // Ocultar estadísticas
     document.getElementById("estadisticas").style.display = "none";
 
-    // Reiniciar variables estadísticas
     velocidadMaxima = 0;
     aceleracionMaxima = 0;
     sumaVelocidades = 0;
@@ -959,11 +842,9 @@ function reiniciarSimulacion() {
 }
 
 function calcularYMostrarEstadisticas() {
-    // Calcular estadísticas
     const velocidadMedia = contadorMuestras > 0 ? sumaVelocidades / contadorMuestras : 0;
     const aceleracionMedia = contadorMuestras > 0 ? sumaAceleraciones / contadorMuestras : 0;
 
-    // Actualizar interfaz
     document.getElementById("velocidadMedia").innerText = velocidadMedia.toFixed(2);
     document.getElementById("aceleracionMedia").innerText = aceleracionMedia.toFixed(2);
     document.getElementById("tiempoTotal").innerText = tiempoActual.toFixed(2);
@@ -971,20 +852,18 @@ function calcularYMostrarEstadisticas() {
     document.getElementById("velocidadMaxima").innerText = velocidadMaxima.toFixed(2);
     document.getElementById("aceleracionMaxima").innerText = aceleracionMaxima.toFixed(2);
 
-    // Copiar el tipo de movimiento de la sección dinámica a la sección de estadísticas
     const tipoMovimientoActual = document.getElementById("tipoMovimiento").innerText;
     const tipoMovimientoEstadisticas = document.querySelector("#estadisticas #tipoMovimiento");
     if (tipoMovimientoEstadisticas) {
         tipoMovimientoEstadisticas.innerText = tipoMovimientoActual;
     }
 
-    // Mostrar el div de estadísticas
     document.getElementById("estadisticas").style.display = "block";
 }
 
 window.onload = function () {
     cambiarTipoAceleracion();
-    // Cargar MathJax una vez que el DOM esté listo
+
     const script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
     script.async = true;
