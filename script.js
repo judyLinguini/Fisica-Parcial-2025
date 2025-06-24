@@ -28,9 +28,9 @@ function cambiarTipoAceleracion() {
 }
 
 function calcularAceleracion(tiempo) {
-    if (tipoAceleracionSeleccionada === "constante") {
+    if (tipoAceleracionSeleccionada === "constante")
         return parseFloat(document.getElementById("aceleracion").value);
-    } else {
+    else {
         try {
             const expresion = document.getElementById("funcion-aceleracion").value;
             const scope = { t: tiempo };
@@ -151,9 +151,8 @@ function cambiarAceleracionTiempoReal(cambio) {
                 factorActual = parseFloat(match[1]);
                 const nuevaExpresion = (factorActual + cambio) + "*" + match[3];
                 document.getElementById("funcion-aceleracion").value = nuevaExpresion;
-            } else {
+            } else
                 document.getElementById("funcion-aceleracion").value = (1 + cambio) + "*(" + expresion + ")";
-            }
 
             document.getElementById("aceleracion-actual").innerText = `Aceleración modificada`;
         } catch (error) {
@@ -507,15 +506,12 @@ function calcularIntegralAnaliticaVariable(tipoFuncion, elementoResultados) {
  * @returns {boolean} True if the node is a constant, false otherwise.
  */
 function isConstant(node, variable) {
-    if (node.type === 'SymbolNode') {
+    if (node.type === 'SymbolNode')
         return node.name !== variable;
-    }
-    if (node.type === 'ConstantNode') {
+    if (node.type === 'ConstantNode')
         return true;
-    }
-    if (node.args) {
+    if (node.args)
         return node.args.every(arg => isConstant(arg, variable));
-    }
     return false;
 }
 
@@ -547,9 +543,9 @@ function getSymbolicIntegratedFunctions(accelerationExpression, initialVelocity,
 
         if (integratedAcelerationNode) {
             let simplifiedIntegratedAceleration = math.simplify(integratedAcelerationNode).toString();
-            if (simplifiedIntegratedAceleration.trim() === '') {
+            if (simplifiedIntegratedAceleration.trim() === '')
                 simplifiedIntegratedAceleration = '0';
-            }
+
             console.log("  Simplified integrated acceleration:", simplifiedIntegratedAceleration);
 
             const velocityExpressionRaw = `${initialVelocity} + (${simplifiedIntegratedAceleration})`;
@@ -568,9 +564,9 @@ function getSymbolicIntegratedFunctions(accelerationExpression, initialVelocity,
 
             if (integratedVelocityNode) {
                 let simplifiedIntegratedVelocity = math.simplify(integratedVelocityNode).toString();
-                if (simplifiedIntegratedVelocity.trim() === '') {
+                if (simplifiedIntegratedVelocity.trim() === '')
                     simplifiedIntegratedVelocity = '0';
-                }
+
                 console.log("  Simplified integrated velocity:", simplifiedIntegratedVelocity);
 
                 const positionExpressionRaw = `${initialPosition} + (${simplifiedIntegratedVelocity})`;
@@ -582,12 +578,10 @@ function getSymbolicIntegratedFunctions(accelerationExpression, initialVelocity,
                 positionExpression = formattedPositionExpression; // Usar la versión formateada
                 successPosition = true;
                 console.log("  Final position expression:", positionExpression);
-            } else {
+            } else
                 console.log("  integratedVelocityNode is NULL. successPosition remains false.");
-            }
-        } else {
+        } else
             console.log("  integratedAcelerationNode is NULL. successVelocity remains false.");
-        }
     } catch (e) {
         console.error("[getSymbolicIntegratedFunctions] Error during symbolic integration process:", e);
         // Fallback a las integrales no resueltas si hay algún error
@@ -614,9 +608,8 @@ function getSymbolicIntegratedFunctions(accelerationExpression, initialVelocity,
  */
 function integrateNode(node, variable, context = '') {
     if (node.type === 'ConstantNode') {
-        if (node.value === 0) {
+        if (node.value === 0)
             return new math.ConstantNode(0);
-        }
         return new math.OperatorNode('*', 'multiply', [new math.ConstantNode(node.value), new math.SymbolNode(variable)]);
     } else if (node.type === 'SymbolNode' && node.name === variable) {
         return new math.OperatorNode('*', 'multiply', [
@@ -660,23 +653,20 @@ function integrateNode(node, variable, context = '') {
                     newNode = new math.OperatorNode(node.op, node.op === '+' ? 'add' : 'subtract', [newNode, integratedArgs[i]]);
                 }
                 return newNode;
-            } else {
+            } else
                 return null;
-            }
         } else if (node.op === 'unaryminus') {
             const integratedArg = integrateNode(node.args[0], variable, context + '_uminus_arg');
             if (integratedArg) {
                 const result = new math.OperatorNode('unaryminus', 'unaryminus', [integratedArg]);
                 return result;
-            } else {
+            } else
                 return null;
-            }
         }
         else if (node.op === '/' && node.args.length === 2) {
 
-            if (isConstant(node.args[0], variable)) {
+            if (isConstant(node.args[0], variable))
                 return null; // Por ahora, ya no aguanto
-            }
             else if (isConstant(node.args[1], variable)) {
                 const constantDivisor = node.args[1];
                 const functionNumerator = node.args[0];
@@ -691,31 +681,27 @@ function integrateNode(node, variable, context = '') {
         }
 
     } else if (node.type === 'FunctionNode') {
-        if (node.name === 'sin' && node.args.length === 1 && node.args[0].type === 'SymbolNode' && node.args[0].name === variable) {
+        if (node.name === 'sin' && node.args.length === 1 && node.args[0].type === 'SymbolNode' && node.args[0].name === variable) 
             return new math.OperatorNode('unaryminus', 'unaryminus', [new math.FunctionNode('cos', [new math.SymbolNode(variable)])]);
-        } else if (node.name === 'cos' && node.args.length === 1 && node.args[0].type === 'SymbolNode' && node.args[0].name === variable) {
+        else if (node.name === 'cos' && node.args.length === 1 && node.args[0].type === 'SymbolNode' && node.args[0].name === variable)
             return new math.FunctionNode('sin', [new math.SymbolNode(variable)]);
-        } else if (node.name === 'exp' && node.args.length === 1 && node.args[0].type === 'SymbolNode' && node.args[0].name === variable) {
+        else if (node.name === 'exp' && node.args.length === 1 && node.args[0].type === 'SymbolNode' && node.args[0].name === variable)
             return new math.FunctionNode('exp', [new math.SymbolNode(variable)]);
-        } else if (node.name === 'log' && node.args.length === 1 && node.args[0].type === 'SymbolNode' && node.args[0].name === variable) {
+        else if (node.name === 'log' && node.args.length === 1 && node.args[0].type === 'SymbolNode' && node.args[0].name === variable)
             return math.parse(`t * log(t) - t`);
-        } else if (node.name === 'log10' && node.args.length === 1 && node.args[0].type === 'SymbolNode' && node.args[0].name === variable) {
+        else if (node.name === 'log10' && node.args.length === 1 && node.args[0].type === 'SymbolNode' && node.args[0].name === variable)
             return math.parse(`t * log10(t) - t / log(10)`);
-        }
     }
-    // New addition to handle constant^variable (e.g., 2^t)
     else if (node.type === 'OperatorNode' && node.op === '^' && node.args.length === 2) {
         const base = node.args[0];
         const exponent = node.args[1];
 
-        // Check if base is a constant and exponent is the integration variable
         if (base.type === 'ConstantNode' && exponent.type === 'SymbolNode' && exponent.name === variable) {
             const baseValue = base.value;
-            if (baseValue > 0 && baseValue !== 1) { // Integral is defined for positive base not equal to 1
-                // Integral of a^t is a^t / ln(a)
+            if (baseValue > 0 && baseValue !== 1) { 
                 return new math.OperatorNode('/', 'divide', [
                     new math.OperatorNode('^', 'pow', [base, exponent]),
-                    new math.FunctionNode('log', [base]) // math.js log is natural logarithm (ln)
+                    new math.FunctionNode('log', [base]) 
                 ]);
             }
         }
@@ -869,9 +855,8 @@ function calcularYMostrarEstadisticas() {
 
     const tipoMovimientoActual = document.getElementById("tipoMovimiento").innerText;
     const tipoMovimientoEstadisticas = document.querySelector("#estadisticas #tipoMovimiento");
-    if (tipoMovimientoEstadisticas) {
+    if (tipoMovimientoEstadisticas)
         tipoMovimientoEstadisticas.innerText = tipoMovimientoActual;
-    }
 
     document.getElementById("estadisticas").style.display = "block";
 }

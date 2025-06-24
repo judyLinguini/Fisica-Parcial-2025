@@ -19,13 +19,13 @@
     <h1>Calculadora de Ecuaciones de Movimiento</h1>
 
     <div class="inputs">
-        <p>Introduce la ecuación de velocidad $v(t)$ en función del tiempo $t$.</p>
+        <p>Introduce la ecuación de velocidad v(t) en función del tiempo t.</p>
         <p class="ayuda">Usa 't' como variable. Ejemplos: `2*t + 5`, `10*sin(t)`, `3*t^2 + 2*t - 1`</p>
 
-        <label for="ecuacionVelocidad">Ecuación de Velocidad $v(t)$:</label>
+        <label for="ecuacionVelocidad">Ecuación de Velocidad v(t):</label>
         <input type="text" id="ecuacionVelocidad" placeholder="Ej: 2*t + 5" value="2*t + 5"><br>
 
-        <label for="posicionInicial">Posición Inicial $x_0$ (constante de integración):</label>
+        <label for="posicionInicial">Posición Inicial x_0 (constante de integración):</label>
         <input type="number" id="posicionInicial" step="any" value="0"><br>
 
         <button onclick="calcularEcuacionesDesdeVelocidad()">Calcular Ecuaciones</button>
@@ -33,13 +33,13 @@
 
     <div class="resultados-ecuaciones">
         <h2>Resultados</h2>
-        <h3>Ecuación de Aceleración $a(t)$:</h3>
+        <h3>Ecuación de Aceleración a(t):</h3>
         <p id="resultadoAceleracion"></p>
-        <p class="nota">Obtenida derivando $v(t)$ con respecto a $t$ ($a(t) = \frac{dv}{dt}$)</p>
+        <p class="nota">Obtenida derivando v(t) con respecto a t (a(t) = \frac{dv}{dt})</p>
 
-        <h3>Ecuación de Posición $x(t)$:</h3>
+        <h3>Ecuación de Posición x(t):</h3>
         <p id="resultadoPosicion"></p>
-        <p class="nota">Obtenida integrando $v(t)$ con respecto a $t$ y usando $x_0$ como constante ($x(t) = \int v(t)dt + x_0$)</p>
+        <p class="nota">Obtenida integrando v(t) con respecto a t y usando x_0 como constante (x(t) = \int v(t)dt + x_0)</p>
     </div>
 
     <script src="calculadoraScript.js"></script>
