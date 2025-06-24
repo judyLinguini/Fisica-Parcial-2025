@@ -50,17 +50,21 @@
                         <li><strong>Hiperbólicas:</strong> Ej. `sinh(t)`, `cosh(t)`, `tanh(t)`.
                             <br>
                             <p class="nota">
-                                <strong>Nota:</strong> Estas funciones se procesan numéricamente, pero el simulador actual
+                                <strong>Nota:</strong> Estas funciones se procesan numéricamente, pero el simulador
+                                actual
                                 <strong>no puede derivar sus ecuaciones de velocidad y posición analíticamente</strong>.
                                 Solo se mostrarán los resultados numéricos para velocidad y posición.
                             </p>
                         </li>
-                        <li><strong>Exponenciales:</strong> Ej. `exp(t)`, `2^t` (usa `pow(2,t)` o simplemente `2^t`)</li>
+                        <li><strong>Exponenciales:</strong> Ej. `exp(t)`, `2^t` (usa `pow(2,t)` o simplemente `2^t`)
+                        </li>
                         <li><strong>Logarítmicas:</strong> Ej. `log(t)`, `log10(t)` (para logaritmo natural y base 10).
                             <br>
                             <p class="nota">
-                                <strong>Nota Importante:</strong> Aunque el simulador puede integrar estas funciones simbólicamente,
-                                el comportamiento de `log(t)` y `log10(t)` cuando `t` se acerca o es igual a `0` (indefinido o $-\infty$)
+                                <strong>Nota Importante:</strong> Aunque el simulador puede integrar estas funciones
+                                simbólicamente,
+                                el comportamiento de `log(t)` y `log10(t)` cuando `t` se acerca o es igual a `0`
+                                (indefinido o $-\infty$)
                                 puede llevar a <strong>valores irrisorios o `NaN`</strong> en la simulación.
                             </p>
                         </li>
@@ -74,22 +78,30 @@
                     <ul>
                         <li>
                             <strong>Funciones con Restricciones de Dominio o Valores Indefinidos:</strong>
-                            Funciones como `sqrt(t)` (raíz cuadrada de números negativos) o funciones trigonométricas inversas
-                            (`asin(t)`, `acos(t)`) fuera de su rango de entrada válido (`-1` a `1`) pueden producir `NaN` (Not a Number)
-                            o resultados complejos no deseados, que la simulación numérica no interpretará correctamente.
+                            Funciones como `sqrt(t)` (raíz cuadrada de números negativos) o funciones trigonométricas
+                            inversas
+                            (`asin(t)`, `acos(t)`) fuera de su rango de entrada válido (`-1` a `1`) pueden producir
+                            `NaN` (Not a Number)
+                            o resultados complejos no deseados, que la simulación numérica no interpretará
+                            correctamente.
                         </li>
                         <li>
                             <strong>División por Cero:</strong>
-                            Expresiones que involucren división donde el denominador pueda llegar a ser cero (ej. `1/t`, `1/(t-5)`)
-                            provocarán una aceleración `Infinity` o `NaN` en el punto de división, lo que detendrá la simulación
+                            Expresiones que involucren división donde el denominador pueda llegar a ser cero (ej. `1/t`,
+                            `1/(t-5)`)
+                            provocarán una aceleración `Infinity` o `NaN` en el punto de división, lo que detendrá la
+                            simulación
                             o producirá resultados erróneos.
                         </li>
                         <li>
                             <strong>Integración Simbólica Limitada:</strong>
                             Aunque la simulación numérica puede evaluar casi cualquier función, la derivación analítica
-                            (mostrar la ecuación exacta de velocidad y posición) está limitada a las funciones más comunes
-                            y combinaciones simples (polinomios, senos, cosenos, exponenciales, logaritmos simples, etc.).
-                            Funciones más complejas (ej. `t*sin(t)`, `sin(t^2)`, o las hiperbólicas) solo mostrarán resultados numéricos.
+                            (mostrar la ecuación exacta de velocidad y posición) está limitada a las funciones más
+                            comunes
+                            y combinaciones simples (polinomios, senos, cosenos, exponenciales, logaritmos simples,
+                            etc.).
+                            Funciones más complejas (ej. `t*sin(t)`, `sin(t^2)`, o las hiperbólicas) solo mostrarán
+                            resultados numéricos.
                         </li>
                     </ul>
                 </div>
