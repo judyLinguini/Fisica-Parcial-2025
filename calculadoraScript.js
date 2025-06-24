@@ -4,7 +4,7 @@
  */
 function calcularEcuacionesDesdeVelocidad() {
     const ecuacionVelocidadStr = document.getElementById('ecuacionVelocidad').value;
-    const posicionInicial = parseFloat(document.getElementById('posicionInicial').value);
+    const posicionInicial = 0;
 
     const resultadoAceleracionDiv = document.getElementById('resultadoAceleracion');
     const resultadoPosicionDiv = document.getElementById('resultadoPosicion');
